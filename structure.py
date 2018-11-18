@@ -33,14 +33,16 @@ class Plant():
 class Pot():
     plant = None 
     full = False
-    def __init__(self, region):
+    def __init__(self, region, posx, posy):
         """
         region : Region
         """
         self.region = region
+        self.posx = posx
+        self.posy = posy
     
 
-class region():
+class Region():
     def __init__(self, gs, position):
         """
         gs : int
@@ -53,9 +55,11 @@ class region():
 PlantTypeList = [PlantType]     #plant type repository for accessing data for growth needs
 WaterList = {}                  #dict[time] = [Plant]  --> when to water which pot
 repotList = {}                  #dict[time] = [Plant]  --> when to repot a certain plant
-PlantList = [Plant]             #current plants
+plantList = [Plant]             #current plants
+potList = [Pot]
+regionList = [Region]
 
-##FUNCTIONS
+##TIME AND DATE FUNCTIONS
 def currDate():
     """
     return current date as string in dd/mm/yyyy format
@@ -66,13 +70,41 @@ def currTime():
     return current time as string in hh:mm format
     """
     return str(time.localtime(time.time())[3]) + ":" + str(time.localtime(time.time())[4])
+    
+    
+    
+##UPDATE FUNCTIONS
 def UWaterList():
     return
 def checkDead():
     return
 def URepotList():
     return
+    
+##INITIALIZATION FUNCTIONS
+def getPots():
+    f = open("./potlayout.txt", "r")
+    for line in f:
+        line = line.split()
+        region = regionList[int(line[0])]
+        pot = Pot(region, line[1], line[2])
+        potList.append(pot)
+    f.close()
+    
+def initRegions():
+    regionList.append(Region(0, ((0,0),(600,600))))         #Need to change all these coords
+    regionList.append(Region(1, ((600,0),(1200,600))))
+    regionList.append(Region(2, ((1200,0),(1800,600))))
+##SEND MAIL FUNCTION(S)
 def sendMail(kind):
+    """
+    Send a mail to the agriculturist, informing hime of 
+        0 : Plants that are ready to be moved
+        1 : Empty pot spots
+        2 : ...
+        
+        else : an error
+    """
     me = "farmbot@neobuild.lu"
     you = "ciaran.hagen.001@student.uni.lu"
     if kind == 0:
