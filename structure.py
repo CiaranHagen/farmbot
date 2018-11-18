@@ -105,8 +105,8 @@ def sendMail(kind):
         
         else : an error
     """
-    me = "farmbot@neobuild.lu"
-    you = "ciaran.hagen.001@student.uni.lu"
+    me = "email"
+    you = "me"
     if kind == 0:
         textfile = "./plantsDonemsg.txt"
         subject = "There are plants done."
