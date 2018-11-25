@@ -63,11 +63,17 @@ class Plant():
         self.pot = pot
     
 class Pot():
+    """
+    plant : Plant
+    full : boolean (presence of peat)
+    """
     plant = None 
     full = False
     def __init__(self, region, posx, posy):
         """
         region : Region
+        posx : Int
+        poxy : Int
         """
         self.region = region
         self.posx = posx
@@ -189,7 +195,8 @@ def initPlantTypes():
         
 
 def calibrate():
-            
+    return  
+    
 ##SEND MAIL FUNCTION(S)
 def sendMail(kind):
     """
@@ -243,6 +250,8 @@ sendMail(0)
 initFarmLayout()
 initPlantTypes()
     
+print(currDate())
+print(currTime())
 print(list(pot.region.ident for pot in potList))
 print(list(regionList[region].ident for region in regionList))
 print(list(pt.name for pt in plantTypeList))
