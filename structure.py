@@ -1,5 +1,5 @@
-import time
-
+import time, os
+import pickle
 import xml.etree.ElementTree
 
 ##List of functions and classes for ease of use
@@ -54,6 +54,7 @@ class PlantType():
 class Plant():
     growthStage = 0
     daysInStage = 0
+    plantId = 0
     def __init__(self, kind, pot):
         """
         kind : PlantType
@@ -61,6 +62,8 @@ class Plant():
         """
         self.kind = kind
         self.pot = pot
+        self.id = str(Plant.plantId)
+        Plant.plantId += 1
     
 class Pot():
     """
@@ -69,15 +72,17 @@ class Pot():
     """
     plant = None 
     full = False
-    def __init__(self, region, posx, posy):
+    def __init__(self, ident, region, posx, posy):
         """
         region : Region
         posx : Int
         poxy : Int
+        ident : String
         """
         self.region = region
         self.posx = posx
         self.posy = posy
+        self.ident = ident
     
 
 class Region():
@@ -178,7 +183,7 @@ def initFarmLayout():
         else:
             #init pots in other regions
             for pot in region:
-                pot = Pot(regionList[region.attrib["id"]], int(pot.attrib["x"]), int(pot.attrib["y"]))
+                pot = Pot(pot.attrib["id"], regionList[region.attrib["id"]], int(pot.attrib["x"]), int(pot.attrib["y"]))
                 potList.append(pot)
  
 
@@ -193,7 +198,20 @@ def initPlantTypes():
            
         plantTypeList.append(PlantType(name, lightNeeded, gt0, gt1, gt2))
         
-
+def savePlants():
+    for plant in plantList:
+        f = open("./plants/" + plant.id + ".txt" , "wb")
+        pickle.dump(plant, f)
+        f.close()
+        
+def loadPlants():
+    for file in os.listdir("./plants"):
+        if file.endswith(".txt"):
+            f = open("./plants/" + file, "rb")
+            plant = pickle.Unpickler(f).load()
+            plantList.append(plant)
+            f.close()
+    
 def calibrate():
     return  
     
@@ -218,7 +236,7 @@ def sendMail(kind):
     else:
         textfile = "./errormsg.txt"
         subject = "An error occurred."
-    
+    """    
     import smtplib
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
@@ -226,12 +244,11 @@ def sendMail(kind):
     Toadd = "XXXX@gmail.com"
     cc = ["ad maildest 1","ad mail dest 2"]
     bcc = "ad mail dest 3"
-    """copie cachée"""
     message = MIMEMultipart() ## création de l'objet "message"
     message['From']= Fromadd
     message['To'] = Toadd
     message['CC']=','.join(cc)
-    messag['BCC']=bcc
+    message['BCC']=bcc
     message['Subject']= "Sujet du mail"
     msg = "Votre message"
     messageattach(MIMEText(msg.encode('utf-8'),'plain','utf-8'))
@@ -243,6 +260,7 @@ def sendMail(kind):
     Toadds=[Toadd]+cc+[bcc] ## Rassemblement des destinataires
     serveur.sendmail(Fromadd,Toadds,texte)
     serveur.quit()
+    """
  
     
     
@@ -258,6 +276,15 @@ print(list(pot.region.ident for pot in potList))
 print(list(regionList[region].ident for region in regionList))
 print(list(pt.name for pt in plantTypeList))
 print("lol Sylvain")    
+
+#plant pickle test
+plantList.append(Plant("plant1", potList[0].ident))
+print(list(plant.id for plant in plantList))
+savePlants()
+plantList = []
+loadPlants()
+print(list(plant.id for plant in plantList))
+
     
     
     

@@ -1,38 +1,5 @@
 <farmbot>
-    <region id="0" gs="0" x1="0" y1="0" x2="10" y2="10">
-        <bac id="0" x1="0" y1="0" x2="10" y2="10" border="2" dist="3"/>
-    </region>
     <region id="1" gs="1" x1="12" y1="0" x2="22" y2="10">
-        <pot x="0" y="0"/>
-        <pot x="1" y="0"/>
-        <pot x="2" y="0"/>
-        <pot x="3" y="0"/>s
-        <pot x="4" y="0"/>
-        <pot x="5" y="0"/>
-        <pot x="6" y="0"/>
-        <pot x="7" y="0"/>
-        <pot x="8" y="0"/>
-    </region>
-    <region id="4" gs="1" x1="12" y1="0" x2="22" y2="10">
-        <pot x="0" y="0"/>
-        <pot x="1" y="0"/>
-        <pot x="2" y="0"/>
-        <pot x="3" y="0"/>
-        <pot x="4" y="0"/>
-        <pot x="5" y="0"/>
-        <pot x="6" y="0"/>
-        <pot x="7" y="0"/>
-        <pot x="8" y="0"/>
-    </region>
-    <region id="2" gs="2" x1="12" y1="0" x2="22" y2="10">
-        <pot x="0" y="0"/>
-        <pot x="0" y="1"/>
-        <pot x="0" y="2"/>
-        <pot x="0" y="3"/>
-        <pot x="0" y="4"/>
-        <pot x="0" y="5"/>
-        <pot x="0" y="6"/>
-        <pot x="0" y="7"/>
-        <pot x="0" y="8"/>
+        <pot id="0" x="0" y="0"/>
     </region>
 </farmbot>
