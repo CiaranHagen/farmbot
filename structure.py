@@ -218,30 +218,32 @@ def sendMail(kind):
     else:
         textfile = "./errormsg.txt"
         subject = "An error occurred."
-"""       
+    
     import smtplib
-
-    # Import the email modules we'll need
+    from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
+    Fromadd = "XXXXX@gmail.com"
+    Toadd = "XXXX@gmail.com"
+    cc = ["ad maildest 1","ad mail dest 2"]
+    bcc = "ad mail dest 3"
+    """copie cachée"""
+    message = MIMEMultipart() ## création de l'objet "message"
+    message['From']= Fromadd
+    message['To'] = Toadd
+    message['CC']=','.join(cc)
+    messag['BCC']=bcc
+    message['Subject']= "Sujet du mail"
+    msg = "Votre message"
+    messageattach(MIMEText(msg.encode('utf-8'),'plain','utf-8'))
 
-    # Open a plain text file for reading.  For this example, assume that
-    # the text file contains only ASCII characters.
-    with open(textfile, 'rb') as fp:
-        # Create a text/plain message
-        msg = MIMEText(fp.read())
-
-    # me == the sender's email address
-    # you == the recipient's email address
-    msg['Subject'] = '%s' % subject
-    msg['From'] = me
-    msg['To'] = you
-
-    # Send the message via our own SMTP server, but don't include the
-    # envelope header.
-    s = smtplib.SMTP('localhost')
-    s.sendmail(me, [you], msg.as_string())
-    s.quit()
-"""  
+    serveur = smtplib.SMTP('smtp.gmail.com',587) ## Connexion au serveur sortant (envoie) en précisant son nom et son port
+    serveur.starttls() ## Spécification de la sécurisation
+    serveur.login(Fromadd,"MDP") ## Authentification
+    texte=message.as_string().encode('utf-8')## Conversion de l'objet "message en chaine de caractères et en encodage utf-8
+    Toadds=[Toadd]+cc+[bcc] ## Rassemblement des destinataires
+    serveur.sendmail(Fromadd,Toadds,texte)
+    serveur.quit()
+ 
     
     
     
@@ -255,7 +257,7 @@ print(currTime())
 print(list(pot.region.ident for pot in potList))
 print(list(regionList[region].ident for region in regionList))
 print(list(pt.name for pt in plantTypeList))
-    
+print("lol Sylvain")    
     
     
     
