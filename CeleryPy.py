@@ -101,31 +101,6 @@ def _coordinate_node(x_coord, y_coord, z_coord):
 
 
 @_print_json
-def add_point(point_x, point_y, point_z, point_r):
-    """Celery Script to add a point to the database.
-
-    Kind:
-        add_point
-    Arguments:
-        Location:
-            Coordinate (x, y, z)
-        Radius: r
-    Body:
-        Kind: pair
-        Args:
-            label: created_by
-            value: plant-detection
-    """
-    args = {}
-    args['location'] = _coordinate_node(point_x, point_y, point_z)
-    args['radius'] = point_r
-    point = create_node(kind='add_point', args=args)
-    created_by = create_pair(label='created_by', value='plant-detection')
-    point['body'] = [create_node(kind='pair', args=created_by)]
-    return point
-
-
-@_print_json
 def set_user_env(label, value):
     """Celery Script to set an environment variable.
 
@@ -171,56 +146,6 @@ def move_absolute(location, offset, speed):
     args['speed'] = speed
     _move_absolute = create_node(kind='move_absolute', args=args)
     return _move_absolute
-
-
-@_print_json
-def move_relative(distance=(0, 0, 0), speed=800):
-    """Celery Script to move relative to the current location.
-
-    Kind:
-        move_relative
-    Arguments:
-        x distance (mm)
-        y distance (mm)
-        z distance (mm)
-        Speed (mm/s)
-    """
-    args = _encode_coordinates(*distance)
-    args['speed'] = speed
-    _move_relative = create_node(kind='move_relative', args=args)
-    return _move_relative
-
-
-@_print_json
-def data_update(endpoint, ids_=None):
-    """Celery Script to signal that a sync is required.
-
-    Kind:
-        data_update
-    Args:
-        value: update
-    Body:
-        Kind: pair
-        Args:
-            label: endpoint
-            value: id
-    """
-    args = {}
-    args['value'] = 'update'
-    _data_update = create_node(kind='data_update', args=args)
-    if isinstance(ids_, list):
-        body = []
-        for id_ in ids_:
-            _endpoint = create_pair(label=endpoint, value=str(id_))
-            body.append(create_node(kind='pair', args=_endpoint))
-    elif ids_ is None:
-        _endpoint = create_pair(label=endpoint, value='*')
-        body = [create_node(kind='pair', args=_endpoint)]
-    else:
-        _endpoint = create_pair(label=endpoint, value=str(ids_))
-        body = [create_node(kind='pair', args=_endpoint)]
-    _data_update['body'] = body
-    return _data_update
 
 
 @_print_json
