@@ -6,20 +6,18 @@ from CeleryPy import log
 from CeleryPy import move_absolute
 from CeleryPy import execute_sequence
 
+variable = {"name1":120, "derp":456}
+
 class MyFarmware():
 
     def get_input_env(self):
         prefix = self.farmwarename.lower().replace('-','_') # my-Farmware -> my_farmware
         
         self.input_title = os.environ.get(prefix+"_title", '-') #va chercher la variable "my_farmware_title" dans l'environnement de l'os. Cette variable a été créée dans le manifest.
-        self.input_default_z = int(os.environ.get(prefix+"_default_z", 0))
-        self.input_default_speed = int(os.environ.get(prefix+"_default_speed", 800))
         self.input_debug = int(os.environ.get(prefix+"_debug", 2)) # valeur par defaut est mise à 2
 
         if self.input_debug >= 1:
             log('title: {}'.format(self.input_title), message_type='debug', title=self.farmwarename)
-            log('default_z: {}'.format(self.input_default_z), message_type='debug', title=self.farmwarename)
-            log('default_speed: {}'.format(self.input_default_speed), message_type='debug', title=self.farmwarename)
             log('debug: {}'.format(self.input_debug), message_type='debug', title=self.farmwarename)
         
     def __init__(self,farmwarename):

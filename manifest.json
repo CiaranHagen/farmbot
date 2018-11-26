@@ -11,8 +11,6 @@
  "args": ["farmbot/main.py"],
  "config": [
   {"name": "title", "label": "Title", "value": "-"}, 
-  {"name": "default_z", "label": "default Z axis value when moving", "value": 0},
-  {"name": "default_speed", "label": "default speed value when moving", "value": 800},
   {"name": "debug", "label": "Debug (0-> No FW debug msg, 1-> FW debug msg, 2-> No Move/exec and FW debug msg only)", "value": 2}
  ]
 }
