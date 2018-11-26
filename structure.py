@@ -275,8 +275,8 @@ print(currTime())
 print(list(pot.region.ident for pot in potList))
 print(list(regionList[region].ident for region in regionList))
 print(list(pt.name for pt in plantTypeList))
-print("lol Sylvain")    
-
+#print("lol Sylvain")    
+"""
 #plant pickle test
 plantList.append(Plant("plant1", potList[0].ident))
 print(list(plant.id for plant in plantList))
@@ -284,7 +284,7 @@ savePlants()
 plantList = []
 loadPlants()
 print(list(plant.id for plant in plantList))
-
+"""
     
     
     
