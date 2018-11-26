@@ -52,5 +52,5 @@ class MyFarmware():
     
     def run(self):
         log("test")
-        self.move_absolute(0,0,100,800)
+        self.move_absolute(0.0,0.0,100.0,800)
         
