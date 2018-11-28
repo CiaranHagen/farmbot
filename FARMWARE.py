@@ -45,12 +45,12 @@ class MyFarmware():
             if self.input_debug >= 1: log(('Move absolute: ' + str(x) + ", " + str(y) + ", " + str(z) + ", " + str(spd)) , message_type='debug', title=str(self.farmwarename) + ' : move_absolute_point')
             if self.input_debug < 2: 
                 self.check_celerypy(move_absolute(
-                    location=[str(x),str(y),str(z)],
+                    location=[{"x":x, "y":y, "z":z}],
                     offset=[0, 0, 0],
                     speed=spd))
     
     
     def run(self):
-        log("test")
+        log("test", message_type='debug', title=str(self.farmwarename) + ' : logTest')
         self.move_absolute(0,0,100,800)
         
