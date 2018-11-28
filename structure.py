@@ -1,6 +1,7 @@
 import time, os
 import pickle
 import xml.etree.ElementTree
+import CeleryPy as cp
 
 ##List of functions and classes for ease of use
 """
@@ -72,7 +73,7 @@ class Pot():
     """
     plant = None 
     full = False
-    def __init__(self, ident, region, posx, posy):
+    def __init__(self, ident, region, posx, posy, posz):
         """
         region : Region
         posx : Int
@@ -80,9 +81,8 @@ class Pot():
         ident : String
         """
         self.region = region
-        self.posx = posx
-        self.posy = posy
         self.ident = ident
+        self.point = cp.add_point(posx, posy, posz, 1)
     
 
 class Region():

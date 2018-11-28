@@ -5,6 +5,7 @@ from API import API
 from CeleryPy import log
 from CeleryPy import move_absolute
 from CeleryPy import execute_sequence
+from CeleryPy import add_point
 
 variable = {"name1":120, "derp":456}
 
@@ -41,16 +42,17 @@ class MyFarmware():
             raise
 
 
-    def move_absolute_point(self, x, y, z, spd):
-            if self.input_debug >= 1: log(('Move absolute: ' + str(x) + ", " + str(y) + ", " + str(z) + ", " + str(spd)) , message_type='debug', title=str(self.farmwarename) + ' : move_absolute_point')
+    def move_absolute_point(self,point, spd):
+            log(point, message_type='debug', title=str(self.farmwarename) + ' : move_absolute_point')
+            if self.input_debug >= 1: log('Move absolute: ' + str(point) , message_type='debug', title=str(self.farmwarename) + ' : move_absolute_point')
             if self.input_debug < 2: 
                 self.check_celerypy(move_absolute(
-                    location=[{"x":x, "y":y, "z":z}],
+                    location=[point['x'],point['y'] ,point['z']],
                     offset=[0, 0, 0],
                     speed=spd))
     
     
     def run(self):
         log("test", message_type='debug', title=str(self.farmwarename) + ' : logTest')
-        self.move_absolute(0,0,100,800)
+        self.move_absolute(add_point(-100, -100, 50, 1))
         
