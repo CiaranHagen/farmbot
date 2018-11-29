@@ -8,7 +8,7 @@
  "url": "https://raw.githubusercontent.com/CiaranHagen/farmbot/master/manifest.json",
  "zip": "https://github.com/CiaranHagen/farmbot/archive/master.zip",
  "executable": "python",
- "args": ["farmbot-master/main.py"],
+ "args": ["farmbot-master/mains.py"],
  "config": [
   {"name": "title", "label": "Title", "value": "-"}, 
   {"name": "debug", "label": "Debug (0-> No FW debug msg, 1-> FW debug msg, 2-> No Move/exec and FW debug msg only)", "value": 2}
