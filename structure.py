@@ -149,7 +149,7 @@ class Structure():
         """
         return str(time.localtime(time.time())[2]) + "/" + str(time.localtime(time.time())[1]) + "/" + str(time.localtime(time.time())[0])
         
-    def currTime():
+    def currTime(self):
         """
         return current time as string in hh:mm format
         """
@@ -332,28 +332,7 @@ class Structure():
     
     
     
-    ##TESTS
     
-    sendMail(0)
-    initFarmLayout()
-    initPlantTypes()
-        
-    print(currDate())
-    print(currTime())
-    print(list(pot.region.ident for pot in potList))
-    print(list(regionList[region].ident for region in regionList))
-    print(list(pt.name for pt in plantTypeList))
-    #print("lol Sylvain") 
-    
-    """
-    #plant pickle test
-    plantList.append(Plant("plant1", potList[0].ident))
-    print(list(plant.id for plant in plantList))
-    savePlants()
-    plantList = []
-    loadPlants()
-    print(list(plant.id for plant in plantList))
-    """
     
     
     

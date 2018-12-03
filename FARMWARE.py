@@ -2,7 +2,7 @@ import os
 from farmware_tools import log
 from farmware_tools import send_celery_script
 import CeleryPy as cp
-#import structure as s
+import structure as s
 
 class MyFarmware():  
     def __init__(self,farmwarename):
@@ -19,7 +19,31 @@ class MyFarmware():
     def run(self):
         log("Farmware running...", message_type='info')
         self.move(100, 100, -50, 10)
-        #self.structure = s.Structure()
+        self.structure = s.Structure()
         log("Data loaded.", message_type='info')
-        #self.structure.moveRel(100,100,100,50)
-        #self.structure.calibrate()
+        self.structure.moveRel(100,100,100,50)
+        self.structure.calibrate()
+        
+        
+        ##TESTS
+        
+        self.structure.sendMail(0)
+        self.structure.initFarmLayout()
+        self.structure.initPlantTypes()
+            
+        print(self.structure.currDate())
+        print(self.structure.currTime())
+        print(list(pot.region.ident for pot in self.structure.potList))
+        print(list(self.structure.regionList[region].ident for region in self.structure.regionList))
+        print(list(pt.name for pt in self.structure.plantTypeList))
+        #print("lol Sylvain") 
+        
+        """
+        #plant pickle test
+        plantList.append(Plant("plant1", potList[0].ident))
+        print(list(plant.id for plant in plantList))
+        savePlants()
+        plantList = []
+        loadPlants()
+        print(list(plant.id for plant in plantList))
+        """
