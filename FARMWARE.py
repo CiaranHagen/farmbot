@@ -16,14 +16,6 @@ class MyFarmware():
         log("going to " + str(posx) + ", " + str(posy) + ", " + str(posz), message_type='debug')
         send_celery_script(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
     
-    def moveRel(self, distx, disty, distz, spd):
-        """
-        distx:Int ,disty:Int ,distz:Int
-        spd :Int
-        """
-        log("moving " + str(distx) + ", " + str(disty) + ", " + str(distz), message_type='debug')
-        send_celery_script(cp.move_relative(distance=(distx, disty, distz), speed=spd))
-    
     def run(self):
         log("Farmware running...", message_type='info')
         #self.move(100, 100, -50, 10)

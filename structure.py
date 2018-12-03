@@ -3,7 +3,6 @@ import pickle
 import xml.etree.ElementTree
 import CeleryPy as cp
 import sys
-from FARMWARE import moveRel
 
 ##List of functions and classes for ease of use
 """
@@ -248,21 +247,30 @@ class Structure():
                     plant = pickle.Unpickler(f).load()
                     self.plantList.append(plant)
                     f.close()
-        
+                    
+                    
+    def moveRel(self, distx, disty, distz, spd):
+        """
+        distx:Int ,disty:Int ,distz:Int
+        spd :Int
+        """
+        log("moving " + str(distx) + ", " + str(disty) + ", " + str(distz), message_type='debug')
+        send_celery_script(cp.move_relative(distance=(distx, disty, distz), speed=spd))
+          
     def calibrate(self):
         try:
             while True:
-                moveRel(100,0,0,100)
+                self.moveRel(100,0,0,100)
         except:
             pass
         try:
             while True:
-                moveRel(0,100,0,100)
+                self.moveRel(0,100,0,100)
         except:
             pass
         try:
             while True:
-                moveRel(0,0,100,100)
+                self.moveRel(0,0,100,100)
         except:
             pass
         return  
