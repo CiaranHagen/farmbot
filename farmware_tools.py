@@ -8,8 +8,13 @@ import os
 import json
 import requests
 
+debug = False
+
 def send_celery_script(command):
     'Send a celery script command.'
+    if debug == True:
+        print(command)
+        return
     try:
         url = os.environ['FARMWARE_URL']
         token = os.environ['FARMWARE_TOKEN']
