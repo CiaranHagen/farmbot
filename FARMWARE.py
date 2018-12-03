@@ -8,9 +8,13 @@ class MyFarmware():
     def __init__(self,farmwarename):
         self.farmwarename = farmwarename
 
-    def move(self,point, spd):
+    def move(self,pos, spd):
+        """
+        pos = [x:Int ,y:Int ,z:Int]
+        spd :int
+        """
         log("going to " + str(point), message_type='debug')
-        send_celery_script(cp.move_absolute(location=[point[0], point[1], point[2]], offset=[0,0,0], speed=10))
+        send_celery_script(cp.move_absolute(location=pos, offset=[0,0,0], speed=spd))
     
     
     def run(self):
