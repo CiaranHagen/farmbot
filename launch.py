@@ -4,6 +4,24 @@ from CeleryPy import log
 import sys
 
 
+FARMWARE_NAME = "jhempbot"
+
+def get_env(key, type_=str):
+    return type_(os.environ["{}_{}".format(farmware_name, key)])
+
+def main():
+    log("jhempbot --> hello")
+    farmware = MyFarmware(FARMWARE_NAME)
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        log(e ,message_type='error', title=FARMWARE_NAME + " : run" )
+        raise Exception(e)
+
+
+"""
 
 if __name__ == "__main__":
 
@@ -35,4 +53,4 @@ if __name__ == "__main__":
 
 
     log('Ending farmware...', message_type='info', title=FARMWARE_NAME)
-
+"""
