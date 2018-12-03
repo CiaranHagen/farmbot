@@ -1,5 +1,7 @@
 import os
 from farmware_tools import log
+from farmware_tools import send_celery_script
+import CeleryPy as cp
 
 class MyFarmware():
         
@@ -8,6 +10,7 @@ class MyFarmware():
 
     def move(self,point, spd):
         log("going to " + str(point), message_type='debug')
+        send_celery_script(cp.move_absolute(location=[point[0], point[1], point[2]], offset=[0,0,0], speed=10))
     
     
     def run(self):
