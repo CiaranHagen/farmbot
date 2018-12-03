@@ -7,7 +7,7 @@ class MyFarmware():
         self.farmwarename = farmwarename
 
     def move(self,point, spd):
-        log("going to " + point, message_type='debug')
+        log("going to " + str(point), message_type='debug')
     
     
     def run(self):
