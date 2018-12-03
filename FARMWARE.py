@@ -18,7 +18,8 @@ class MyFarmware():
     
     def run(self):
         log("Farmware running...", message_type='info')
-        #self.move(100, 100, -50, 10)
+        self.move(100, 100, -50, 10)
         self.structure = s.Structure()
         log("Data loaded.", message_type='info')
-        self.structure.calibrate()
+        self.structure.moveRel(100,100,100,50)
+        #self.structure.calibrate()

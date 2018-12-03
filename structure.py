@@ -137,7 +137,6 @@ class Structure():
         self.uWaterList(2)
         self.loadPlants()
         self.uRepotList()
-        self.calibrate()
         
         
         
@@ -261,18 +260,24 @@ class Structure():
           
     def calibrate(self):
         try:
-            while True:
-                self.moveRel(100,0,0,100)
+            i = 0
+            while True and i<21:
+                self.moveRel(100,0,0,50)
+                i += 1
         except:
             pass
         try:
-            while True:
-                self.moveRel(0,100,0,100)
+            i = 0
+            while True and i<14:
+                self.moveRel(0,100,0,50)
+                i += 1
         except:
             pass
         try:
-            while True:
-                self.moveRel(0,0,100,100)
+            i = 0
+            while True and i<4:
+                self.moveRel(0,0,100,50)
+                i += 1
         except:
             pass
         return  
