@@ -15,19 +15,19 @@ if __name__ == "__main__":
     try:
         reload(sys)
         sys.setdefaultencoding('utf8') #force utf8 for celerypy return code
-         log('Setting encoding.', message_type='info', title=FARMWARE_NAME)
+        log('Setting encoding.', message_type='info', title=FARMWARE_NAME)
     except:
         pass
 
     try:
         farmware = MyFarmware(FARMWARE_NAME)
-         log('initializing farmware', message_type='info', title=FARMWARE_NAME)
+        #log('initializing farmware', message_type='info', title=FARMWARE_NAME)
     except Exception as e:
         log(e ,message_type='error', title=FARMWARE_NAME + " : init" )
         raise Exception(e) #Envoyer un message d'erreur -> arrète le programme
     else:
         try:
-             log('farmware runs after this message.', message_type='info', title=FARMWARE_NAME)
+            #log('farmware runs after this message.', message_type='info', title=FARMWARE_NAME)
             farmware.run()
         except Exception as e:
             log(e ,message_type='error', title=FARMWARE_NAME + " : run" )
