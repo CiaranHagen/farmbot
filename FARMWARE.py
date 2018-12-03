@@ -13,8 +13,8 @@ class MyFarmware():
         pos = [x:Int ,y:Int ,z:Int]
         spd :Int
         """
-        log("going to " + str(point), message_type='debug')
-        send_celery_script(cp.move_absolute(location=[int(posx), int(posy), int(posz)], offset=[0,0,0], speed=10))
+        log("going to " + str(posx) + ", " + str(posy) + ", " + str(posz), message_type='debug')
+        send_celery_script(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
     
     
     def run(self):
