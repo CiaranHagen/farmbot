@@ -1,8 +1,6 @@
 import os
 from FARMWARE import MyFarmware
 from farmware_tools import log
-import sys
-
 
 FARMWARE_NAME = "jhempbot"
 
@@ -11,8 +9,8 @@ def get_env(key, type_=str):
 
 def main():
     log("jhempbot --> hello")
-    farmware = MyFarmware(FARMWARE_NAME)
-    farmware.run()
+    #farmware = MyFarmware(FARMWARE_NAME)
+    #farmware.run()
 
 if __name__ == "__main__":
     main()
