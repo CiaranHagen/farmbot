@@ -1,5 +1,5 @@
 <farmbot>
     <region id="1" gs="1" x1="12" y1="0" x2="22" y2="10">
-        <pot id="0" x="0" y="0"/>
+        <pot id="0" x="0" y="0" z="0"/>
     </region>
 </farmbot>

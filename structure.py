@@ -2,6 +2,7 @@ import time, os
 import pickle
 import xml.etree.ElementTree
 import CeleryPy as cp
+import sys
 
 ##List of functions and classes for ease of use
 """
@@ -9,7 +10,7 @@ classes:
 
 PlantType(name, lightNeeded, growthTimeS, growthTimeP, growthTimeF)
 Plant(kind, pot)
-Pot(region, posx, posy)
+Pot(region, posx, posy, posz)
 Region(ident, gs, position)
 ___________________________________________________________________
 
@@ -172,18 +173,19 @@ def initFarmLayout():
                 x2 = int(bac.attrib["x2"])
                 y1 = int(bac.attrib["y1"])
                 y2 = int(bac.attrib["y2"])
+                z = int(bac.attrib["z"])
                 border = int(bac.attrib["border"])
                 dist = int(bac.attrib["dist"])
                 
                 for i in range(x1 + border, x2 - border + 1, dist):
                     for j in range(y1 + border, y2 - border + 1, dist):
-                        pot = Pot(regionList[region.attrib["id"]], i, j)
+                        pot = Pot(regionList[region.attrib["id"]], i, j, z)
                         potList.append(pot)
                         
         else:
             #init pots in other regions
             for pot in region:
-                pot = Pot(pot.attrib["id"], regionList[region.attrib["id"]], int(pot.attrib["x"]), int(pot.attrib["y"]))
+                pot = Pot(pot.attrib["id"], regionList[region.attrib["id"]], int(pot.attrib["x"]), int(pot.attrib["y"]), int(pot.attrib["z"]))
                 potList.append(pot)
  
 

@@ -7,8 +7,8 @@ import sys
 
 if __name__ == "__main__":
 
-    #FARMWARE_NAME = "Jhemp-bot"
-    FARMWARE_NAME = ((__file__.split(os.sep))[len(__file__.split(os.sep))-3]).replace('-master','')
+    FARMWARE_NAME = "jhempbot"
+    #FARMWARE_NAME = ((__file__.split(os.sep))[len(__file__.split(os.sep))-3]).replace('-master','')
 
     log('Starting farmware...', message_type='info', title=FARMWARE_NAME)
     
