@@ -1,6 +1,6 @@
 import os
 from FARMWARE import MyFarmware
-from CeleryPy import log
+from farmware_tools import log
 import sys
 
 

@@ -2,9 +2,8 @@ import os
 import datetime
 import re
 from API import API
-from CeleryPy import log
+from farmware_tools import log
 from CeleryPy import move_absolute
-from CeleryPy import execute_sequence
 from CeleryPy import add_point
 
 variable = {"name1":120, "derp":456}
