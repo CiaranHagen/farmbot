@@ -12,15 +12,10 @@ def get_env(key, type_=str):
 def main():
     log("jhempbot --> hello")
     farmware = MyFarmware(FARMWARE_NAME)
+    farmware.run()
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        log(e ,message_type='error', title=FARMWARE_NAME + " : run" )
-        raise Exception(e)
-
-
+    main()
 """
 
 if __name__ == "__main__":
