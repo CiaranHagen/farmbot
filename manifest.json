@@ -3,7 +3,7 @@
      "language": "python",
      "author": "Sylvain Vaugon & Ciarán Hagen",
      "description": "Automate farmbot processes",
-     "version": "1.0.12",
+     "version": "1.0.13",
      "min_os_version_major": 6,
      "url": "https://raw.githubusercontent.com/CiaranHagen/farmbot/master/manifest.json",
      "zip": "https://github.com/CiaranHagen/farmbot/archive/master.zip",
