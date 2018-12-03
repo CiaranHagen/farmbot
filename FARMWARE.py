@@ -2,7 +2,7 @@ import os
 from farmware_tools import log
 from farmware_tools import send_celery_script
 import CeleryPy as cp
-import structure as s
+#import structure as s
 
 class MyFarmware():  
     def __init__(self,farmwarename):
