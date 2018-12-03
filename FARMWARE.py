@@ -26,7 +26,7 @@ class MyFarmware():
         
         
         ##TESTS
-        
+        """
         self.structure.sendMail(0)
         self.structure.initFarmLayout()
         self.structure.initPlantTypes()
@@ -37,6 +37,7 @@ class MyFarmware():
         print(list(self.structure.regionList[region].ident for region in self.structure.regionList))
         print(list(pt.name for pt in self.structure.plantTypeList))
         #print("lol Sylvain") 
+        """
         
         """
         #plant pickle test
