@@ -7,14 +7,19 @@
 import os
 import json
 import requests
+from time import sleep
 
-debug = False
+debug = True
 
 def send_celery_script(command):
     'Send a celery script command.'
+    #start debug
     if debug == True:
         print(command)
+        if command["kind"] == "wait":
+            sleep(command["args"]["milliseconds"]//1000)
         return
+    #end debug
     try:
         url = os.environ['FARMWARE_URL']
         token = os.environ['FARMWARE_TOKEN']

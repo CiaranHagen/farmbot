@@ -5,9 +5,19 @@ import CeleryPy as cp
 import structure as s
 
 class MyFarmware():  
+    coords = [0,0,0]
     def __init__(self,farmwarename):
         self.farmwarename = farmwarename
-
+    
+    ##FUNCTION CONTROL
+    def waterSensor(self):
+        water = False
+        water = True    #<-- change to check soil sensor...
+        return water
+        
+    def waterFall(self, mm): #<-- implement
+        return 
+    ##MOVEMENT
     def move(self, posx, posy, posz, spd):
         """
         posx:Int ,posy:Int ,posz:Int
@@ -16,35 +26,94 @@ class MyFarmware():
         log("going to " + str(posx) + ", " + str(posy) + ", " + str(posz), message_type='debug')
         send_celery_script(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
     
+    def goto(self, x, y, z):
+        self.move(self.coords[0], self.coords[1], 0, 100)
+        self.move(x, y, 0, 100)
+        self.move(x, y, z, 100)
+        self.coords = [x, y, z]
+    
+    def getTool(self, tool):
+        l = self.s.toolList[tool]
+        self.goto(l[0] , l[1], l[2])
+        self.move(l[0] + 100, l[1], l[2])
+        self.coords = l
+        
+    def putTool(self, tool):
+        l = self.s.toolList[tool]
+        self.goto(l[0] + 100 , l[1], l[2])
+        self.move(l[0], l[1], l[2])
+        self.move(l[0], l[1], l[2] + 100)
+        self.coords = l
+        
+      
+    ##SEQUENCES   
+    def water(self):
+        whereWater = []
+        l = self.s.waterAccessList
+        self.getTool("waterSensor")
+        for i in l:
+            self.goto(i[0], i[1], i[2])
+            sensor = waterSensor()
+            while sensor == False:
+                self.move(i[0], i[1], self.coords[2] - 20, 20)
+                self.coords[2] -= 20
+            whereWater.append(i[2]-self.coords[2])
+        self.putTool("waterSensor")
+        self.getTool("water")
+        for i in range(len(l)):
+            if whereWater[i] > 0:
+                self.goto(l[i][0], l[i][1], l[i][2])
+                self.waterFall(whereWater[i])
+        self.putTool("water")
+    
+    def repot(self):
+        return            
+              
+                  
+    ##START POINT
     def run(self):
         log("Farmware running...", message_type='info')
-        self.move(100, 100, -50, 10)
-        self.structure = s.Structure()
+        #self.move(100, 100, -50, 10)
+        self.s = s.Structure()
         log("Data loaded.", message_type='info')
-        self.structure.moveRel(100,100,100,50)
-        self.structure.calibrate()
+        #self.s.moveRel(100,100,100,50)
+        self.s.calibrate()
         
-        
-        ##TESTS
-        """
-        self.structure.sendMail(0)
-        self.structure.initFarmLayout()
-        self.structure.initPlantTypes()
+        ##MAIN WHILE
+        while True:
+            """
+            check timelists for tasks, else wait the remaining time
+            """
+            currHour = int(self.s.currTime().split(":")[0])
+            if currHour in self.s.waterList:
+                self.water()
+                self.s.waterList = self.s.waterList[1:]
+                
+            if currHour in self.s.repotList:
+                self.repot()
+                del self.s.repotList[currHour] 
+                
+            currMin = int(self.s.currTime().split(":")[1])  
+            send_celery_script(cp.wait((59 - currMin)*60*1000)) #59 instead of 60 as safety
             
-        print(self.structure.currDate())
-        print(self.structure.currTime())
-        print(list(pot.region.ident for pot in self.structure.potList))
-        print(list(self.structure.regionList[region].ident for region in self.structure.regionList))
-        print(list(pt.name for pt in self.structure.plantTypeList))
-        #print("lol Sylvain") 
-        """
-        
-        """
-        #plant pickle test
-        plantList.append(Plant("plant1", potList[0].ident))
-        print(list(plant.id for plant in plantList))
-        savePlants()
-        plantList = []
-        loadPlants()
-        print(list(plant.id for plant in plantList))
-        """
+            ##TESTS
+            
+            #self.s.sendMail(0)
+            #self.s.initFarmLayout()
+            #self.s.initPlantTypes()
+            
+            #print(self.s.currDate())
+            #print(self.s.currTime())
+            #print(list(pot.region.ident for pot in self.s.potList))
+            #print(list(self.s.regionList[region].ident for region in self.s.regionList))
+            #print(list(pt.name for pt in self.s.plantTypeList))
+            #print("lol Sylvain") 
+            
+            #plant pickle test
+            #plantList.append(Plant("plant1", potList[0].ident))
+            #print(list(plant.id for plant in plantList))
+            #savePlants()
+            #plantList = []
+            #loadPlants()
+            #print(list(plant.id for plant in plantList))
+

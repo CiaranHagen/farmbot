@@ -124,12 +124,13 @@ class Structure():
  
     ##LIST AND VARIABLE INITIALIZATIONS
     plantTypeList = []              #plant type repository for accessing data for growth needs
-    waterList = []                  #[time]                --> when to water which pot
+    waterList = []                  #[time]                --> when to water
+    waterAccessLit = []             #[[Int,Int,Int]]       --> water access point coords
     repotList = {}                  #dict[time] = [Plant]  --> when to repot a certain plant
     plantList = []                  #current plants
     potList = []                    #a list of pots. This is useful for watering.
     regionList = {}                 #a list of the regions... for specific tasks
-
+    toolList = {"water":[0,0,0], "seeder":[0,0,0], "holer":[0,0,0], "waterSensor":[0,0,0]}
 
     def __init__(self):
         self.initPlantTypes()
