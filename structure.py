@@ -125,7 +125,7 @@ class Structure():
     ##LIST AND VARIABLE INITIALIZATIONS
     plantTypeList = []              #plant type repository for accessing data for growth needs
     waterList = []                  #[time]                --> when to water
-    waterAccessLit = []             #[[Int,Int,Int]]       --> water access point coords
+    waterAccessList = []             #[[Int,Int,Int]]       --> water access point coords
     repotList = {}                  #dict[time] = [Plant]  --> when to repot a certain plant
     plantList = []                  #current plants
     potList = []                    #a list of pots. This is useful for watering.
@@ -163,7 +163,7 @@ class Structure():
         """
         Divide up the day, to water at regular intervals (step).
         """
-        for i in range(1, 24):
+        for i in range(0, 24):
             if i % step == 0:
                 self.waterList.append(i)
         return

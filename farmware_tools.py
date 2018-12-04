@@ -9,7 +9,7 @@ import json
 import requests
 from time import sleep
 
-debug = True
+debug = False
 
 def send_celery_script(command):
     'Send a celery script command.'

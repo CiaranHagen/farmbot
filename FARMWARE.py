@@ -17,6 +17,8 @@ class MyFarmware():
         
     def waterFall(self, mm): #<-- implement
         return 
+        
+        
     ##MOVEMENT
     def move(self, posx, posy, posz, spd):
         """
@@ -35,14 +37,14 @@ class MyFarmware():
     def getTool(self, tool):
         l = self.s.toolList[tool]
         self.goto(l[0] , l[1], l[2])
-        self.move(l[0] + 100, l[1], l[2])
+        self.move(l[0] + 100, l[1], l[2], 50)
         self.coords = l
         
     def putTool(self, tool):
         l = self.s.toolList[tool]
         self.goto(l[0] + 100 , l[1], l[2])
-        self.move(l[0], l[1], l[2])
-        self.move(l[0], l[1], l[2] + 100)
+        self.move(l[0], l[1], l[2], 50)
+        self.move(l[0], l[1], l[2] + 100, 50)
         self.coords = l
         
       
@@ -79,41 +81,50 @@ class MyFarmware():
         #self.s.moveRel(100,100,100,50)
         self.s.calibrate()
         
+        ##TESTS
+        
+        #self.s.sendMail(0)
+        #self.s.initFarmLayout()
+        #self.s.initPlantTypes()
+        #print(self.s.currDate())
+        #print(self.s.currTime())
+        #print(list(pot.region.ident for pot in self.s.potList))
+        #print(list(self.s.regionList[region].ident for region in self.s.regionList))
+        #print(list(pt.name for pt in self.s.plantTypeList))
+        #print("lol Sylvain") 
+        #plant pickle test
+        #self.s.plantList.append(Plant("plant1", potList[0].ident))
+        #print(list(plant.id for plant in plantList))
+        #savePlants()
+        print(self.s.plantList, " <-- plantlist")
+        print(self.s.waterAccessList, " <-- waterAccessList")
+        print(self.s.plantTypeList, " <-- plantTypeList")
+        print(self.s.waterList, " <-- waterList")
+        print(self.s.repotList, " <-- repotList")
+        print(self.s.potList, " <-- potList")
+        print(self.s.regionList, " <-- regionList")
+        print(self.s.toolList, " <-- toolList")
+        #loadPlants()
+        #print(list(plant.id for plant in plantList))
+
+        
         ##MAIN WHILE
         while True:
             """
             check timelists for tasks, else wait the remaining time
             """
+            #break
             currHour = int(self.s.currTime().split(":")[0])
-            if currHour in self.s.waterList:
+            if (currHour in self.s.waterList) and (self.s.waterList != []):
                 self.water()
                 self.s.waterList = self.s.waterList[1:]
                 
-            if currHour in self.s.repotList:
+            if (currHour in self.s.repotList) and (self.s.repotList != []):
                 self.repot()
                 del self.s.repotList[currHour] 
                 
             currMin = int(self.s.currTime().split(":")[1])  
             send_celery_script(cp.wait((59 - currMin)*60*1000)) #59 instead of 60 as safety
             
-            ##TESTS
             
-            #self.s.sendMail(0)
-            #self.s.initFarmLayout()
-            #self.s.initPlantTypes()
-            
-            #print(self.s.currDate())
-            #print(self.s.currTime())
-            #print(list(pot.region.ident for pot in self.s.potList))
-            #print(list(self.s.regionList[region].ident for region in self.s.regionList))
-            #print(list(pt.name for pt in self.s.plantTypeList))
-            #print("lol Sylvain") 
-            
-            #plant pickle test
-            #plantList.append(Plant("plant1", potList[0].ident))
-            #print(list(plant.id for plant in plantList))
-            #savePlants()
-            #plantList = []
-            #loadPlants()
-            #print(list(plant.id for plant in plantList))
-
+        
