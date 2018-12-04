@@ -280,8 +280,7 @@ class Structure():
                 self.moveRel(0,0,100,50)
                 i += 1
         except:
-            pass
-        return  
+            pass 
         
     ##SEND MAIL FUNCTION(S)
     def sendMail(self, kind):

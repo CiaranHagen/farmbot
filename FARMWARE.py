@@ -2,7 +2,7 @@ import os
 from farmware_tools import log
 from farmware_tools import send_celery_script
 import CeleryPy as cp
-import structure as s
+import structure as stru
 
 class MyFarmware():  
     coords = [0,0,0]
@@ -76,10 +76,10 @@ class MyFarmware():
     def run(self):
         log("Farmware running...", message_type='info')
         #self.move(100, 100, -50, 10)
-        self.s = s.Structure()
+        self.s = stru.Structure()
         log("Data loaded.", message_type='info')
         #self.s.moveRel(100,100,100,50)
-        self.s.calibrate()
+        #self.s.calibrate()
         
         ##TESTS
         
@@ -113,7 +113,7 @@ class MyFarmware():
             """
             check timelists for tasks, else wait the remaining time
             """
-            #break
+            break
             currHour = int(self.s.currTime().split(":")[0])
             if (currHour in self.s.waterList) and (self.s.waterList != []):
                 self.water()
