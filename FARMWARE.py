@@ -82,7 +82,7 @@ class MyFarmware():
         #self.s.calibrate()
         
         ##TESTS
-        
+        """
         self.s.sendMail(0)
         #self.s.initFarmLayout()
         #self.s.initPlantTypes()
@@ -106,7 +106,7 @@ class MyFarmware():
         print(self.s.toolList, " <-- toolList")
         #loadPlants()
         #print(list(plant.id for plant in plantList))
-
+        """
         
         ##MAIN WHILE
         while True:
