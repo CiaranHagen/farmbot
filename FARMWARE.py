@@ -2,7 +2,7 @@ import os
 from farmware_tools import log
 from farmware_tools import send_celery_script
 import CeleryPy as cp
-import structure as stru
+from structure import PlantType, Plant, Pot, Region, Structure
 
 class MyFarmware():  
     coords = [0,0,0]
@@ -76,34 +76,34 @@ class MyFarmware():
     def run(self):
         log("Farmware running...", message_type='info')
         #self.move(100, 100, -50, 10)
-        self.s = stru.Structure()
+        self.s = Structure()
         log("Data loaded.", message_type='info')
         #self.s.moveRel(100,100,100,50)
         #self.s.calibrate()
         
         ##TESTS
         
-        #self.s.sendMail(0)
+        self.s.sendMail(0)
         #self.s.initFarmLayout()
         #self.s.initPlantTypes()
-        #print(self.s.currDate())
-        #print(self.s.currTime())
+        print(self.s.currDate())
+        print(self.s.currTime())
         #print(list(pot.region.ident for pot in self.s.potList))
         #print(list(self.s.regionList[region].ident for region in self.s.regionList))
         #print(list(pt.name for pt in self.s.plantTypeList))
-        #print("lol Sylvain") 
+        print("lol Sylvain") 
         #plant pickle test
         #self.s.plantList.append(Plant("plant1", potList[0].ident))
         #print(list(plant.id for plant in plantList))
         #savePlants()
-        #print(self.s.plantList, " <-- plantlist")
-        #print(self.s.waterAccessList, " <-- waterAccessList")
-        #print(self.s.plantTypeList, " <-- plantTypeList")
-        #print(self.s.waterList, " <-- waterList")
-        #print(self.s.repotList, " <-- repotList")
-        #print(self.s.potList, " <-- potList")
-        #print(self.s.regionList, " <-- regionList")
-        #print(self.s.toolList, " <-- toolList")
+        print(self.s.plantList, " <-- plantlist")
+        print(self.s.waterAccessList, " <-- waterAccessList")
+        print(self.s.plantTypeList, " <-- plantTypeList")
+        print(self.s.waterList, " <-- waterList")
+        print(self.s.repotList, " <-- repotList")
+        print(self.s.potList, " <-- potList")
+        print(self.s.regionList, " <-- regionList")
+        print(self.s.toolList, " <-- toolList")
         #loadPlants()
         #print(list(plant.id for plant in plantList))
 
