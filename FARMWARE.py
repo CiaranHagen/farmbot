@@ -169,54 +169,60 @@ class Structure():
         
     ##INITIALIZATION FUNCTIONS
     def initFarmLayout(self):
-        e = xml.etree.ElementTree.parse('./potLayout.xml').getroot()
-        log("Accessed potLayout.xml", message_type='struct')
-        for region in e:
-            #init regions
-            x1 = int(region.attrib["x1"])
-            x2 = int(region.attrib["x2"])
-            y1 = int(region.attrib["y1"])
-            y2 = int(region.attrib["y2"])
-            gs = int(region.attrib["gs"])
-            ident = int(region.attrib["id"])
-            
-            self.regionList[region.attrib["id"]] = Region(ident, gs, ((x1, y1), (x2, y2)))
-            
-            if region.attrib["gs"] == "0":
-                #init bacs in region 0
-                for bac in region:
-                    x1 = int(bac.attrib["x1"])
-                    x2 = int(bac.attrib["x2"])
-                    y1 = int(bac.attrib["y1"])
-                    y2 = int(bac.attrib["y2"])
-                    z = int(bac.attrib["z"])
-                    border = int(bac.attrib["border"])
-                    dist = int(bac.attrib["dist"])
-                    
-                    for i in range(x1 + border, x2 - border + 1, dist):
-                        for j in range(y1 + border, y2 - border + 1, dist):
-                            pot = Pot(self.regionList[region.attrib["id"]], i, j, z)
-                            self.potList.append(pot)
-                            
-            else:
-                #init pots in other regions
-                for pot in region:
-                    pot = Pot(pot.attrib["id"], self.regionList[region.attrib["id"]], int(pot.attrib["x"]), int(pot.attrib["y"]), int(pot.attrib["z"]))
-                    self.potList.append(pot)
-        log("Loaded pot layout.", message_type='struct')
+        try:
+            e = xml.etree.ElementTree.parse('./potLayout.xml').getroot()
+            log("Accessed potLayout.xml", message_type='struct')
+            for region in e:
+                #init regions
+                x1 = int(region.attrib["x1"])
+                x2 = int(region.attrib["x2"])
+                y1 = int(region.attrib["y1"])
+                y2 = int(region.attrib["y2"])
+                gs = int(region.attrib["gs"])
+                ident = int(region.attrib["id"])
+                
+                self.regionList[region.attrib["id"]] = Region(ident, gs, ((x1, y1), (x2, y2)))
+                
+                if region.attrib["gs"] == "0":
+                    #init bacs in region 0
+                    for bac in region:
+                        x1 = int(bac.attrib["x1"])
+                        x2 = int(bac.attrib["x2"])
+                        y1 = int(bac.attrib["y1"])
+                        y2 = int(bac.attrib["y2"])
+                        z = int(bac.attrib["z"])
+                        border = int(bac.attrib["border"])
+                        dist = int(bac.attrib["dist"])
+                        
+                        for i in range(x1 + border, x2 - border + 1, dist):
+                            for j in range(y1 + border, y2 - border + 1, dist):
+                                pot = Pot(self.regionList[region.attrib["id"]], i, j, z)
+                                self.potList.append(pot)
+                                
+                else:
+                    #init pots in other regions
+                    for pot in region:
+                        pot = Pot(pot.attrib["id"], self.regionList[region.attrib["id"]], int(pot.attrib["x"]), int(pot.attrib["y"]), int(pot.attrib["z"]))
+                        self.potList.append(pot)
+            log("Loaded pot layout.", message_type='struct')
+        except Exception as e:
+            log(e, message_type='error')
 
     def initPlantTypes(self):
-        e = xml.etree.ElementTree.parse('./plantTypes.xml').getroot()
-        log("Accessed plantTypes.xml", message_type='struct')
-        for plantType in e:
-            name = plantType.attrib["name"]
-            lightNeeded = int(plantType.attrib["lightNeeded"])
-            gt0 = int(plantType.attrib["gt0"])
-            gt1 = int(plantType.attrib["gt1"])        
-            gt2 = int(plantType.attrib["gt2"])     
-               
-            self.plantTypeList.append(PlantType(name, lightNeeded, gt0, gt1, gt2))
-        log("Loaded plant types.", message_type='struct')
+        try:
+            e = xml.etree.ElementTree.parse('./plantTypes.xml').getroot()
+            log("Accessed plantTypes.xml", message_type='struct')
+            for plantType in e:
+                name = plantType.attrib["name"]
+                lightNeeded = int(plantType.attrib["lightNeeded"])
+                gt0 = int(plantType.attrib["gt0"])
+                gt1 = int(plantType.attrib["gt1"])        
+                gt2 = int(plantType.attrib["gt2"])     
+                   
+                self.plantTypeList.append(PlantType(name, lightNeeded, gt0, gt1, gt2))
+            log("Loaded plant types.", message_type='struct')
+        except Exception as e:
+            log(e, message_type='error')
            
     def savePlants(self):
         log("Saving plant objects.", message_type='struct')
