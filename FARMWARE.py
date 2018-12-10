@@ -1,9 +1,9 @@
 import os
 from farmware_tools import log
-from farmware_tools import send_celery_script
+from farmware_tools import send_celery_script as send
 import CeleryPy as cp
 from time import sleep
-from structure import PlantType, Plant, Pot, Region, Structure
+from structure import Plant, PlantType, Pot, Region, Structure
 
 
 class Sequence:
@@ -38,7 +38,7 @@ class MyFarmware():
         spd :Int
         """
         log("moving " + str(distx) + ", " + str(disty) + ", " + str(distz), message_type='debug')
-        info = send_celery_script(cp.move_relative(distance=(distx, disty, distz), speed=spd))
+        info = send(cp.move_relative(distance=(distx, disty, distz), speed=spd))
         return info
              
     def move(self, posx, posy, posz, spd):
@@ -47,7 +47,7 @@ class MyFarmware():
         spd :Int
         """
         log("going to " + str(posx) + ", " + str(posy) + ", " + str(posz), message_type='debug')
-        info = send_celery_script(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
+        info = send(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
         return info
     
     def goto(self, x, y, z):
@@ -96,28 +96,27 @@ class MyFarmware():
                   
     ##START POINT
     def run(self):
-        """
         log("Farmware running...", message_type='info')
         
         s = Sequence("1", "green")
         s.add(self.move(100, 100, -100, 50))
         s.add(self.move(150, 150, -50, 50))
-        x = send_celery_script(cp.create_node(kind='execute', args=s.sequence))
+        s.add(log("test inside sequence", message_type='info'))
+        send(cp.create_node(kind='execute', args=s.sequence)) 
         
-        log("test 2", message_type='info')
-        
+        log("test middle", message_type='info')
+
         a = Sequence("2", "green")
         a.add(self.move(100, 100, -100, 50))
-        send_celery_script(cp.create_node(kind='execute', args=a.sequence))
+        a.add(self.moveRel(100,100,100,50))
+        send(cp.create_node(kind='execute', args=a.sequence))
         
         log("test finish", message_type='info')
-        self.s = Structure()
+        s = Structure()
         log("Data loaded.", message_type='info')
         
         log("Test successful.", message_type='info')
-        self.s.moveRel(100,100,100,50)
-        #self.s.calibrate()
-        """
+        
         ##TESTS
         """
         self.s.sendMail(0)
@@ -161,7 +160,7 @@ class MyFarmware():
                 del self.s.repotList[currHour] 
                 
             currMin = int(self.s.currTime().split(":")[1])  
-            send_celery_script(cp.wait((59 - currMin)*60*1000)) #59 instead of 60 as safety
+            send(cp.wait((59 - currMin)*60*1000)) #59 instead of 60 as safety
             
             
         

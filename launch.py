@@ -14,7 +14,8 @@ def get_env(key, type_=str):
 def main():
     log("jhempbot --> hello")
     farmware = MyFarmware(FARMWARE_NAME)
-    
+    farmware.run()
+    """
     log("Farmware running...", message_type='info')
     
     s = Sequence("1", "green")
@@ -35,7 +36,7 @@ def main():
     log("Data loaded.", message_type='info')
     
     log("Test successful.", message_type='info')
-    
+    """
     
 if __name__ == "__main__":
     main()
