@@ -13,9 +13,10 @@ PlantType(name, lightNeeded, growthTimeS, growthTimeP, growthTimeF)
 Plant(kind, pot)
 Pot(region, posx, posy, posz)
 Region(ident, gs, position)
+Structure()
 ___________________________________________________________________
 
-lists:
+parameter lists of Structure:
 
 plantTypeList = plant type repository for accessing data for growth needs
 waterList = [time]                --> when to water which pot
@@ -25,7 +26,7 @@ potList = a list of pots. This is useful for watering.
 regionList = a list of the regions... for specific tasks
 ___________________________________________________________________
 
-functions:
+methods of Structure:
 
 currDate()
 currTime()
