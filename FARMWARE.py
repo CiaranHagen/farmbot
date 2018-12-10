@@ -93,6 +93,8 @@ class MyFarmware():
         s.add(self.move(150, 150, -50, 50))
         x = send_celery_script(cp.create_node(kind='execute', args=s.sequence))
         
+        log("test 2", message_type='info')
+        
         a = Sequence("2", "green")
         a.add(self.move(100, 100, -100, 50))
         send_celery_script(cp.create_node(kind='execute', args=a.sequence))
@@ -102,7 +104,7 @@ class MyFarmware():
         log("Data loaded.", message_type='info')
         
         log("Test successful.", message_type='info')
-        #self.s.moveRel(100,100,100,50)
+        self.s.moveRel(100,100,100,50)
         #self.s.calibrate()
         
         ##TESTS
