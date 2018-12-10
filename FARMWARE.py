@@ -3,7 +3,7 @@ from farmware_tools import log
 from farmware_tools import send_celery_script as send
 import CeleryPy as cp
 from time import sleep
-from structure import Plant, PlantType, Pot, Region, Structure
+from structure import *
 
 
 class Sequence:
@@ -112,37 +112,38 @@ class MyFarmware():
         send(cp.create_node(kind='execute', args=a.sequence))
         
         log("test finish", message_type='info')
-        s = Structure()
+        struct = structure.Structure()
         log("Data loaded.", message_type='info')
         
         log("Test successful.", message_type='info')
         
         ##TESTS
-        """
-        self.s.sendMail(0)
+        
+        #self.s.sendMail(0)
         #self.s.initFarmLayout()
         #self.s.initPlantTypes()
-        print(self.s.currDate())
-        print(self.s.currTime())
+        #print(struct.currDate())
+        #print(struct.currTime())
         #print(list(pot.region.ident for pot in self.s.potList))
         #print(list(self.s.regionList[region].ident for region in self.s.regionList))
         #print(list(pt.name for pt in self.s.plantTypeList))
-        print("lol Sylvain") 
+        #print("lol Sylvain") 
         #plant pickle test
         #self.s.plantList.append(Plant("plant1", potList[0].ident))
         #print(list(plant.id for plant in plantList))
         #savePlants()
-        print(self.s.plantList, " <-- plantlist")
-        print(self.s.waterAccessList, " <-- waterAccessList")
-        print(self.s.plantTypeList, " <-- plantTypeList")
-        print(self.s.waterList, " <-- waterList")
-        print(self.s.repotList, " <-- repotList")
-        print(self.s.potList, " <-- potList")
-        print(self.s.regionList, " <-- regionList")
-        print(self.s.toolList, " <-- toolList")
+        """
+        print(struct.plantList, " <-- plantlist")
+        print(struct.waterAccessList, " <-- waterAccessList")
+        print(struct.plantTypeList, " <-- plantTypeList")
+        print(struct.waterList, " <-- waterList")
+        print(struct.repotList, " <-- repotList")
+        print(struct.potList, " <-- potList")
+        print(struct.regionList, " <-- regionList")
+        print(struct.toolList, " <-- toolList")
+        """
         #loadPlants()
         #print(list(plant.id for plant in plantList))
-        """
         
         ##MAIN WHILE
         while True:
