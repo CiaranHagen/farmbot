@@ -86,13 +86,15 @@ class MyFarmware():
     ##START POINT
     def run(self):
         log("Farmware running...", message_type='info')
-        self.s = Structure()
-        log("Data loaded.", message_type='info')
         
         s = Sequence("1", "green")
         s.add(self.move(100, 100, -100, 50))
         s.add(self.move(150, 150, -50, 50))
         send_celery_script(cp.create_node(kind='execute', args=s.sequence))
+        
+        log("test finish", message_type='info')
+        self.s = Structure()
+        log("Data loaded.", message_type='info')
         
         log("Test successful.", message_type='info')
         #self.s.moveRel(100,100,100,50)
