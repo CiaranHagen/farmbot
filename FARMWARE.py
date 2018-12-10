@@ -90,7 +90,7 @@ class MyFarmware():
         s = Sequence("1", "green")
         s.add(self.move(100, 100, -100, 50))
         s.add(self.move(150, 150, -50, 50))
-        send_celery_script(cp.create_node(kind='execute', args=s.sequence))
+        x = send_celery_script(cp.create_node(kind='execute', args=s.sequence))
         
         a = Sequence("2", "green")
         a.add(self.move(100, 100, -100, 50))
