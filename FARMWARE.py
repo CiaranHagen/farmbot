@@ -209,20 +209,18 @@ class Structure():
             log(e, message_type='error')
 
     def initPlantTypes(self):
-        try:
-            e = xml.etree.ElementTree.parse('./plantTypes.xml').getroot()
-            log("Accessed plantTypes.xml", message_type='struct')
-            for plantType in e:
-                name = plantType.attrib["name"]
-                lightNeeded = int(plantType.attrib["lightNeeded"])
-                gt0 = int(plantType.attrib["gt0"])
-                gt1 = int(plantType.attrib["gt1"])        
-                gt2 = int(plantType.attrib["gt2"])     
-                   
-                self.plantTypeList.append(PlantType(name, lightNeeded, gt0, gt1, gt2))
-            log("Loaded plant types.", message_type='struct')
-        except Exception as e:
-            log(e, message_type='error')
+        log("Present o)", message_type='struct')
+        e = xml.etree.ElementTree.parse('./plantTypes.xml').getroot()
+        log("Accessed plantTypes.xml", message_type='struct')
+        for plantType in e:
+            name = plantType.attrib["name"]
+            lightNeeded = int(plantType.attrib["lightNeeded"])
+            gt0 = int(plantType.attrib["gt0"])
+            gt1 = int(plantType.attrib["gt1"])        
+            gt2 = int(plantType.attrib["gt2"])     
+               
+            self.plantTypeList.append(PlantType(name, lightNeeded, gt0, gt1, gt2))
+        log("Loaded plant types.", message_type='struct')
            
     def savePlants(self):
         log("Saving plant objects.", message_type='struct')
