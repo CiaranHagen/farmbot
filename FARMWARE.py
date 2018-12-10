@@ -20,6 +20,21 @@ class MyFarmware():
         
         
     ##MOVEMENT
+    def check_celerypy(self,ret):
+        try:
+            status_code = ret.status_code
+        except:
+            status_code = -1
+        try:
+            text = ret.text[:100]
+        except:
+            text = ret
+        if status_code == -1 or status_code == 200:
+            if self.input_debug >= 1: log("{} -> {}".format(status_code,text), message_type='debug', title=self.farmwarename + ' check_celerypy')
+        else:
+            log("{} -> {}".format(status_code,text), message_type='error', title=self.farmwarename + ' check_celerypy')
+            raise
+            
     def move(self, posx, posy, posz, spd):
         """
         posx:Int ,posy:Int ,posz:Int
@@ -27,7 +42,7 @@ class MyFarmware():
         """
         log("going to " + str(posx) + ", " + str(posy) + ", " + str(posz), message_type='debug')
         #send_celery_script(
-        cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd)
+        self.check_celerypy(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
         #)
     
     def goto(self, x, y, z):
