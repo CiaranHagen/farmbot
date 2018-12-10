@@ -303,31 +303,6 @@ class Structure():
         else:
             textfile = "./errormsg.txt"
             subject = "An error occurred."
-        """    
-        import smtplib
-        from email.mime.multipart import MIMEMultipart
-        from email.mime.text import MIMEText
-        Fromadd = "XXXXX@gmail.com"
-        Toadd = "XXXX@gmail.com"
-        cc = ["ad maildest 1","ad mail dest 2"]
-        bcc = "ad mail dest 3"
-        message = MIMEMultipart() ## création de l'objet "message"
-        message['From']= Fromadd
-        message['To'] = Toadd
-        message['CC']=','.join(cc)
-        message['BCC']=bcc
-        message['Subject']= "Sujet du mail"
-        msg = "Votre message"
-        messageattach(MIMEText(msg.encode('utf-8'),'plain','utf-8'))
-
-        serveur = smtplib.SMTP('smtp.gmail.com',587) ## Connexion au serveur sortant (envoie) en précisant son nom et son port
-        serveur.starttls() ## Spécification de la sécurisation
-        serveur.login(Fromadd,"MDP") ## Authentification
-        texte=message.as_string().encode('utf-8')## Conversion de l'objet "message en chaine de caractères et en encodage utf-8
-        Toadds=[Toadd]+cc+[bcc] ## Rassemblement des destinataires
-        serveur.sendmail(Fromadd,Toadds,texte)
-        serveur.quit()
-        """
  
     
     

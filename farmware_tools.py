@@ -28,8 +28,10 @@ def send_celery_script(command):
     else:
         requests.post(
             url + 'api/v1/celery_script',
-            headers={'Authorization': 'Bearer ' + token,
-                     'content-type': 'application/json'},
+            #headers={'Authorization': 'Bearer ' + token,
+                     #'content-type': 'application/json'},
+            headers = {'Authorization': 'bearer {}'.format(token),
+                       'content-type': "application/json"},
             data=json.dumps(command))
 
 def log(message, message_type='info'):
