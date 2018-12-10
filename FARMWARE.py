@@ -4,6 +4,16 @@ from farmware_tools import send_celery_script
 import CeleryPy as cp
 from structure import PlantType, Plant, Pot, Region, Structure
 
+
+class Sequence:
+    def __init__(self, name='New Sequence', color='gray'):
+        self.sequence = {
+            'name': name,
+            'color': color,
+            'body': []
+            }
+        self.add = self.sequence['body'].append
+
 class MyFarmware():  
     coords = [0,0,0]
     def __init__(self,farmwarename):
@@ -76,10 +86,13 @@ class MyFarmware():
     ##START POINT
     def run(self):
         log("Farmware running...", message_type='info')
-        x = self.move(100, 100, -100, 50)
         self.s = Structure()
         log("Data loaded.", message_type='info')
-        x = self.move(150, 150, -50, 50)
+        with Sequence("1", "green") as s:
+            s.add(self.move(100, 100, -100, 50))
+            s.add(self.move(150, 150, -50, 50))
+        send_celery_script(cp.create_node(kind='execute', args=s.sequence))
+        
         log("Test successful.", message_type='info')
         #self.s.moveRel(100,100,100,50)
         #self.s.calibrate()
