@@ -26,9 +26,8 @@ class MyFarmware():
         spd :Int
         """
         log("going to " + str(posx) + ", " + str(posy) + ", " + str(posz), message_type='debug')
-        #send_celery_script(
-        send_celery_script(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
-        #)
+        info = send_celery_script(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
+        return info
     
     def goto(self, x, y, z):
         self.move(self.coords[0], self.coords[1], 0, 100)
