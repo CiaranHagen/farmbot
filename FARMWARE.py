@@ -76,10 +76,10 @@ class MyFarmware():
     ##START POINT
     def run(self):
         log("Farmware running...", message_type='info')
-        x = self.move(100, 100, 100, 50)
+        x = self.move(100, 100, 100, -100)
         self.s = Structure()
         log("Data loaded.", message_type='info')
-        x = self.move(150, 150, 50, 50)
+        x = self.move(150, 150, 50, -50)
         log("Test successful.", message_type='info')
         #self.s.moveRel(100,100,100,50)
         #self.s.calibrate()
