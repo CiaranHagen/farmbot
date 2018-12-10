@@ -249,15 +249,6 @@ class Structure():
                     plant = pickle.Unpickler(f).load()
                     self.plantList.append(plant)
                     f.close()
-                    
-                    
-    def moveRel(self, distx, disty, distz, spd):
-        """
-        distx:Int ,disty:Int ,distz:Int
-        spd :Int
-        """
-        log("moving " + str(distx) + ", " + str(disty) + ", " + str(distz), message_type='debug')
-        send_celery_script(cp.move_relative(distance=(distx, disty, distz), speed=spd))
           
     def calibrate(self):
         try:

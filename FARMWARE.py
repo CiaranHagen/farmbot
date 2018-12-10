@@ -31,7 +31,16 @@ class MyFarmware():
         return 
         
         
-    ##MOVEMENT            
+    ##MOVEMENT
+    def moveRel(self, distx, disty, distz, spd):
+        """
+        distx:Int ,disty:Int ,distz:Int
+        spd :Int
+        """
+        log("moving " + str(distx) + ", " + str(disty) + ", " + str(distz), message_type='debug')
+        info = send_celery_script(cp.move_relative(distance=(distx, disty, distz), speed=spd))
+        return info
+             
     def move(self, posx, posy, posz, spd):
         """
         posx:Int ,posy:Int ,posz:Int
