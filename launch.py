@@ -26,6 +26,7 @@ def main():
 
     a = Sequence("2", "green")
     a.add(farmware.move(100, 100, -100, 50))
+    a.add(farmware.s.moveRel(100,100,100,50))
     send_celery_script(cp.create_node(kind='execute', args=a.sequence))
     
     log("test finish", message_type='info')
@@ -33,7 +34,7 @@ def main():
     log("Data loaded.", message_type='info')
     
     log("Test successful.", message_type='info')
-    farmware.s.moveRel(100,100,100,50)
+    
     
 if __name__ == "__main__":
     main()
