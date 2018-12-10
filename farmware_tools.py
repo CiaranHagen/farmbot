@@ -33,6 +33,7 @@ def send_celery_script(command):
             headers = {'Authorization': 'bearer {}'.format(token),
                        'content-type': "application/json"},
             data=json.dumps(command))
+    return True
 
 def log(message, message_type='info'):
     'Send a send_message command to post a log to the Web App.'
