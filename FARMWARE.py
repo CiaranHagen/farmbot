@@ -17,9 +17,10 @@ class Sequence:
 
 class MyFarmware():  
     coords = [0,0,0]
+    TOKEN = ''
     def __init__(self,farmwarename):
         self.farmwarename = farmwarename
-    
+
     ##FUNCTION CONTROL
     def waterSensor(self):
         water = False

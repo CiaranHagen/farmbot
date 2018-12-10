@@ -20,9 +20,9 @@ def main():
     s = Sequence("1", "green")
     s.add(farmware.move(100, 100, -100, 50))
     s.add(farmware.move(150, 150, -50, 50))
-    x = send_celery_script(cp.create_node(kind='execute', args=s.sequence))
-    send_celery_script(cp.wait(10))    
-    log("test 2", message_type='info')
+    s.add(log("test inside sequence", message_type='info'))
+    x = send_celery_script(cp.create_node(kind='execute', args=s.sequence)) 
+    log("test middle", message_type='info')
 
     a = Sequence("2", "green")
     a.add(farmware.move(100, 100, -100, 50))

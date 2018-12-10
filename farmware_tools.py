@@ -8,7 +8,6 @@ import os
 import json
 import requests
 from time import sleep
-from functools import wraps
 debug = False
 
 def send_celery_script(command):
@@ -31,7 +30,7 @@ def send_celery_script(command):
             headers={'Authorization': 'Bearer ' + token,
                      'content-type': 'application/json'},
             data=json.dumps(command))
-        return ret
+        return 0
 
 def log(message, message_type='info'):
     'Send a send_message command to post a log to the Web App.'
