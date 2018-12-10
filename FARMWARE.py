@@ -86,6 +86,7 @@ class MyFarmware():
                   
     ##START POINT
     def run(self):
+        """
         log("Farmware running...", message_type='info')
         
         s = Sequence("1", "green")
@@ -106,7 +107,7 @@ class MyFarmware():
         log("Test successful.", message_type='info')
         self.s.moveRel(100,100,100,50)
         #self.s.calibrate()
-        
+        """
         ##TESTS
         """
         self.s.sendMail(0)
