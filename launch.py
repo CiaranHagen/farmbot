@@ -21,9 +21,9 @@ def main():
     s.add(farmware.move(100, 100, -100, 50))
     s.add(farmware.move(150, 150, -50, 50))
     x = send_celery_script(cp.create_node(kind='execute', args=s.sequence))
-    
+    farmware = MyFarmware(FARMWARE_NAME)    
     log("test 2", message_type='info')
-    farmware = MyFarmware(FARMWARE_NAME)
+
     a = Sequence("2", "green")
     a.add(farmware.move(100, 100, -100, 50))
     send_celery_script(cp.create_node(kind='execute', args=a.sequence))
