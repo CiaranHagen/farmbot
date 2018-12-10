@@ -164,7 +164,7 @@ class Structure():
     ##INITIALIZATION FUNCTIONS
     def initFarmLayout(self):
         e = xml.etree.ElementTree.parse('./potLayout.xml').getroot()
-        
+        log("Accessed potLayout.xml", message_type='struct')
         for region in e:
             #init regions
             x1 = int(region.attrib["x1"])
@@ -197,10 +197,11 @@ class Structure():
                 for pot in region:
                     pot = Pot(pot.attrib["id"], self.regionList[region.attrib["id"]], int(pot.attrib["x"]), int(pot.attrib["y"]), int(pot.attrib["z"]))
                     self.potList.append(pot)
-     
+        log("Loaded pot layout.", message_type='struct')
 
     def initPlantTypes(self):
         e = xml.etree.ElementTree.parse('./plantTypes.xml').getroot()
+        log("Accessed plantTypes.xml", message_type='struct')
         for plantType in e:
             name = plantType.attrib["name"]
             lightNeeded = int(plantType.attrib["lightNeeded"])
@@ -209,14 +210,18 @@ class Structure():
             gt2 = int(plantType.attrib["gt2"])     
                
             self.plantTypeList.append(PlantType(name, lightNeeded, gt0, gt1, gt2))
-            
+        log("Loaded plant types.", message_type='struct')
+           
     def savePlants(self):
+        log("Saving plant objects.", message_type='struct')
         for plant in self.plantList:
             f = open("./plants/" + plant.id + ".txt" , "wb")
             pickle.dump(plant, f)
             f.close()
+        log("Saved plant objects.", message_type='struct')
             
     def loadPlants(self):
+        log("Loading plant objects.", message_type='struct')
         for file in os.listdir("./plants"):
             if file != "save.txt":
                 if file.endswith(".txt"):
@@ -224,29 +229,7 @@ class Structure():
                     plant = pickle.Unpickler(f).load()
                     self.plantList.append(plant)
                     f.close()
-          
-    def calibrate(self):
-        try:
-            i = 0
-            while True and i<21:
-                self.moveRel(100,0,0,50)
-                i += 1
-        except:
-            pass
-        try:
-            i = 0
-            while True and i<14:
-                self.moveRel(0,100,0,50)
-                i += 1
-        except:
-            pass
-        try:
-            i = 0
-            while True and i<4:
-                self.moveRel(0,0,100,50)
-                i += 1
-        except:
-            pass 
+        log("Loaded plant objects.", message_type='struct')
         
     ##SEND MAIL FUNCTION(S)
     def sendMail(self, kind):
@@ -338,7 +321,29 @@ class MyFarmware():
         self.move(l[0], l[1], l[2] + 100, 50)
         self.coords = l
         
-      
+    def calibrate(self):
+        try:
+            i = 0
+            while True and i<21:
+                self.moveRel(100,0,0,50)
+                i += 1
+        except:
+            pass
+        try:
+            i = 0
+            while True and i<14:
+                self.moveRel(0,100,0,50)
+                i += 1
+        except:
+            pass
+        try:
+            i = 0
+            while True and i<4:
+                self.moveRel(0,0,100,50)
+                i += 1
+        except:
+            pass 
+              
     ##SEQUENCES   
     def water(self):
         whereWater = []
@@ -369,18 +374,11 @@ class MyFarmware():
         
         s = Sequence("1", "green")
         s.add(self.move(100, 100, -100, 50))
-        s.add(self.move(150, 150, -50, 50))
-        s.add(log("test inside sequence", message_type='info'))
+        s.add(self.moveRel(100,100,100,50))
+        s.add(log("Move-test end.", message_type='info'))
         send(cp.create_node(kind='execute', args=s.sequence)) 
         
-        log("test middle", message_type='info')
-
-        a = Sequence("2", "green")
-        a.add(self.move(100, 100, -100, 50))
-        a.add(self.moveRel(100,100,100,50))
-        send(cp.create_node(kind='execute', args=a.sequence))
-        
-        log("test finish", message_type='info')
+        log("Move-test finished.", message_type='info')
         structure = Structure()
         log("Data loaded.", message_type='info')
         
