@@ -114,11 +114,17 @@ class Structure():
     toolList = {"water":[0,0,0], "seeder":[0,0,0], "holer":[0,0,0], "waterSensor":[0,0,0]}
 
     def __init__(self):
+        log("Init - 0 --> structure", message_type='info')
         self.initPlantTypes()
+        log("Init - 1 --> structure", message_type='info')
         self.initFarmLayout()
+        log("Init - 2 --> structure", message_type='info')
         self.uWaterList(2)
+        log("Init - 3 --> structure", message_type='info')
         self.loadPlants()
+        log("Init - 4 --> structure", message_type='info')
         self.uRepotList()
+        log("Init - 5 --> structure", message_type='info')
         
     ##TIME AND DATE FUNCTIONS
     def currDate(self):
@@ -379,7 +385,7 @@ class MyFarmware():
         send(cp.create_node(kind='execute', args=s.sequence)) 
         
         log("Move-test finished.", message_type='info')
-        structure = Structure()
+        struct = Structure()
         log("Data loaded.", message_type='info')
         
         log("Test successful.", message_type='info')
@@ -400,14 +406,14 @@ class MyFarmware():
         #print(list(plant.id for plant in plantList))
         #savePlants()
         """
-        print(structure.plantList, " <-- plantlist")
-        print(structure.waterAccessList, " <-- waterAccessList")
-        print(structure.plantTypeList, " <-- plantTypeList")
-        print(structure.waterList, " <-- waterList")
-        print(structure.repotList, " <-- repotList")
-        print(structure.potList, " <-- potList")
-        print(structure.regionList, " <-- regionList")
-        print(structure.toolList, " <-- toolList")
+        print(struct.plantList, " <-- plantlist")
+        print(struct.waterAccessList, " <-- waterAccessList")
+        print(struct.plantTypeList, " <-- plantTypeList")
+        print(struct.waterList, " <-- waterList")
+        print(struct.repotList, " <-- repotList")
+        print(struct.potList, " <-- potList")
+        print(struct.regionList, " <-- regionList")
+        print(struct.toolList, " <-- toolList")
         """
         #loadPlants()
         #print(list(plant.id for plant in plantList))
