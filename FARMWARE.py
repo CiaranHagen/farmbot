@@ -30,9 +30,9 @@ class MyFarmware():
         except:
             text = ret
         if status_code == -1 or status_code == 200:
-            if self.input_debug >= 1: log("{} -> {}".format(status_code,text), message_type='debug', title=self.farmwarename + ' check_celerypy')
+            cp.log("{} -> {}".format(status_code,text), message_type='debug', title=self.farmwarename + ' check_celerypy')
         else:
-            log("{} -> {}".format(status_code,text), message_type='error', title=self.farmwarename + ' check_celerypy')
+            cp.log("{} -> {}".format(status_code,text), message_type='error', title=self.farmwarename + ' check_celerypy')
             raise
             
     def move(self, posx, posy, posz, spd):
