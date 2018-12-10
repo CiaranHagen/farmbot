@@ -143,7 +143,7 @@ def set_user_env(label, value):
     return _set_user_env
 
 
-#@_print_json
+@_print_json
 def move_absolute(location, offset, speed):
     """Celery Script to move to a location.
 
