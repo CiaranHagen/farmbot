@@ -115,7 +115,6 @@ class Structure():
 
     def __init__(self):
         log("Init - 0 --> structure", message_type='info')
-        log("Yes I can!", message_type='info')
         self.initPlantTypes()
         log("Init - 1 --> structure", message_type='info')
         self.initFarmLayout()
@@ -311,43 +310,61 @@ class MyFarmware():
         return info
     
     def goto(self, x, y, z):
-        self.move(self.coords[0], self.coords[1], 0, 100)
-        self.move(x, y, 0, 100)
-        self.move(x, y, z, 100)
+        s = Sequence("goto", "green")
+        s.add(self.move(self.coords[0], self.coords[1], 0, 100))
+        s.add(self.move(x, y, 0, 100))
+        s.add(self.move(x, y, z, 100))
+        s.add(log("Moved to "+str(x)+", "+str(y)+", "+str(z)+".", message_type='info'))
+        send(cp.create_node(kind='execute', args=s.sequence)) 
         self.coords = [x, y, z]
     
     def getTool(self, tool):
-        l = self.s.toolList[tool]
-        self.goto(l[0] , l[1], l[2])
-        self.move(l[0] + 100, l[1], l[2], 50)
+        l = self.struct.toolList[tool]
+        s = Sequence("getTool", "green")
+        s.add(self.goto(l[0] , l[1], l[2]))
+        s.add(self.move(l[0] + 100, l[1], l[2], 50))
+        s.add(log("Getting "+tool+".", message_type='info'))
+        send(cp.create_node(kind='execute', args=s.sequence)) 
         self.coords = l
         
     def putTool(self, tool):
-        l = self.s.toolList[tool]
-        self.goto(l[0] + 100 , l[1], l[2])
-        self.move(l[0], l[1], l[2], 50)
-        self.move(l[0], l[1], l[2] + 100, 50)
+        l = self.struct.toolList[tool]
+        s = Sequence("putTool", "green")
+        s.add(self.goto(l[0] + 100 , l[1], l[2]))
+        s.add(self.move(l[0], l[1], l[2], 50))
+        s.add(self.move(l[0], l[1], l[2] + 100, 50))
+        s.add(log("Putting back "+tool+".", message_type='info'))
+        send(cp.create_node(kind='execute', args=s.sequence)) 
         self.coords = l
         
     def calibrate(self):
         try:
             i = 0
             while True and i<21:
-                self.moveRel(100,0,0,50)
+                s = Sequence("xCalib", "green")
+                s.add(self.moveRel(100,0,0,50))
+                s.add(log("Calibrating  x axis.", message_type='info'))
+                send(cp.create_node(kind='execute', args=s.sequence)) 
                 i += 1
         except:
             pass
         try:
             i = 0
             while True and i<14:
-                self.moveRel(0,100,0,50)
+                s = Sequence("yCalib", "green")
+                s.add(self.moveRel(0,100,0,50))
+                s.add(log("Calibrating  y axis.", message_type='info'))
+                send(cp.create_node(kind='execute', args=s.sequence)) 
                 i += 1
         except:
             pass
         try:
             i = 0
             while True and i<4:
-                self.moveRel(0,0,100,50)
+                s = Sequence("zCalib", "green")
+                s.add(self.moveRel(0,0,100,50))
+                s.add(log("Calibrating  z axis.", message_type='info'))
+                send(cp.create_node(kind='execute', args=s.sequence)) 
                 i += 1
         except:
             pass 
@@ -355,13 +372,16 @@ class MyFarmware():
     ##SEQUENCES   
     def water(self):
         whereWater = []
-        l = self.s.waterAccessList
+        l = self.struct.waterAccessList
         self.getTool("waterSensor")
         for i in l:
             self.goto(i[0], i[1], i[2])
             sensor = waterSensor()
-            while sensor == False:
-                self.move(i[0], i[1], self.coords[2] - 20, 20)
+            while sensor == False and self.coords[2] >= -100: #<-- insert proper floor value
+                s = Sequence("findWater", "green")
+                s.add(self.move(i[0], i[1], self.coords[2] - 20, 20))
+                s.add(log("Looking for water.", message_type='info'))
+                send(cp.create_node(kind='execute', args=s.sequence)) 
                 self.coords[2] -= 20
             whereWater.append(i[2]-self.coords[2])
         self.putTool("waterSensor")
@@ -380,17 +400,17 @@ class MyFarmware():
     def run(self):
         log("Farmware running...", message_type='info')
         
-        s = Sequence("1", "green")
-        s.add(self.move(100, 100, -100, 50))
-        s.add(self.moveRel(100,100,100,50))
-        s.add(log("Move-test end.", message_type='info'))
-        send(cp.create_node(kind='execute', args=s.sequence)) 
+        self.goto(100,100,-50)
         
         log("Move-test finished.", message_type='info')
-        struct = Structure()
+        
+        self.struct = Structure()
         log("Data loaded.", message_type='info')
         
+        self.water()
+        
         log("Test successful.", message_type='info')
+        print(self.coords)
         
         ##TESTS
         
