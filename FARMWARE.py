@@ -315,8 +315,9 @@ class MyFarmware():
         s.add(self.move(x, y, 0, 100))
         s.add(self.move(x, y, z, 100))
         s.add(log("Moved to "+str(x)+", "+str(y)+", "+str(z)+".", message_type='info'))
-        send(cp.create_node(kind='execute', args=s.sequence)) 
+        info = send(cp.create_node(kind='execute', args=s.sequence)) 
         self.coords = [x, y, z]
+        return info
     
     def getTool(self, tool):
         l = self.struct.toolList[tool]
@@ -324,8 +325,9 @@ class MyFarmware():
         s.add(self.goto(l[0] , l[1], l[2]))
         s.add(self.move(l[0] + 100, l[1], l[2], 50))
         s.add(log("Getting "+tool+".", message_type='info'))
-        send(cp.create_node(kind='execute', args=s.sequence)) 
+        info = send(cp.create_node(kind='execute', args=s.sequence)) 
         self.coords = l
+        return info
         
     def putTool(self, tool):
         l = self.struct.toolList[tool]
