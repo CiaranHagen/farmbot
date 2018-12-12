@@ -402,6 +402,8 @@ class MyFarmware():
         
         self.goto(100,100,-50)
         
+        self.calibrate()
+        
         log("Move-test finished.", message_type='info')
         
         self.struct = Structure()
