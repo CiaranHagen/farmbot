@@ -6,7 +6,7 @@
 
 import os
 import json
-import requests
+import urllib2
 from time import sleep
 debug = False
 
@@ -25,11 +25,12 @@ def send_celery_script(command):
     except KeyError:
         print(command)
     else:
-        ret = requests.post(
+        ret = urllib2.Request(
             url + 'api/v1/celery_script',
             headers={'Authorization': 'Bearer ' + token,
                      'content-type': 'application/json'},
             data=json.dumps(command))
+        urllib2.urlopen(ret)
         return 0
 
 def log(message, message_type='info'):

@@ -10,7 +10,7 @@ add config_update
 import os
 import json
 from functools import wraps
-import requests
+import urllib2
 
 
 def farmware_api_url():
@@ -39,8 +39,9 @@ def _print_json(function):
             headers = {'Authorization': 'bearer {}'.format(farmware_token),
                        'content-type': "application/json"}
             payload = json.dumps(function(*args, **kwargs))
-            ret = requests.post(farmware_api_url() + 'celery_script',
+            ret = urllib2.Request(farmware_api_url() + 'celery_script',
                           data=payload, headers=headers)
+            urllib2.urlopen(ret)
             return ret
     return wrapper
 

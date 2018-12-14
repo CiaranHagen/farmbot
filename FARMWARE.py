@@ -404,14 +404,14 @@ class MyFarmware():
         
         self.goto(100,100,-50)
         
-        self.calibrate()
-        
         log("Move-test finished.", message_type='info')
         
         self.struct = Structure()
         log("Data loaded.", message_type='info')
         
         self.water()
+        
+        self.calibrate()
         
         log("Test successful.", message_type='info')
         print(self.coords)
