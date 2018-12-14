@@ -431,16 +431,16 @@ class MyFarmware():
         #self.s.plantList.append(Plant("plant1", potList[0].ident))
         #print(list(plant.id for plant in plantList))
         #savePlants()
-        """
-        print(struct.plantList, " <-- plantlist")
-        print(struct.waterAccessList, " <-- waterAccessList")
-        print(struct.plantTypeList, " <-- plantTypeList")
-        print(struct.waterList, " <-- waterList")
-        print(struct.repotList, " <-- repotList")
-        print(struct.potList, " <-- potList")
-        print(struct.regionList, " <-- regionList")
-        print(struct.toolList, " <-- toolList")
-        """
+        
+        print(self.struct.plantList, " <-- plantlist")
+        print(self.struct.waterAccessList, " <-- waterAccessList")
+        print(self.struct.plantTypeList, " <-- plantTypeList")
+        print(self.struct.waterList, " <-- waterList")
+        print(self.struct.repotList, " <-- repotList")
+        print(self.struct.potList, " <-- potList")
+        print(self.struct.regionList, " <-- regionList")
+        print(self.struct.toolList, " <-- toolList")
+        
         #loadPlants()
         #print(list(plant.id for plant in plantList))
         
