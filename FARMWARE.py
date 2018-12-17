@@ -444,11 +444,6 @@ class MyFarmware():
     ##START POINT
     def run(self):
         log("Farmware running...", message_type='info')
-        
-        self.goto(100,100,-50)
-        
-        log("Move-test finished.", message_type='info')
-        
         self.struct = Structure()
         log("Data loaded.", message_type='info')
         
@@ -474,8 +469,8 @@ class MyFarmware():
         #self.s.plantList.append(Plant("plant1", potList[0].ident))
         #print(list(plant.id for plant in plantList))
         #savePlants()
-        print(self.struct.toolList, " <-- toollist")
         """
+        print(self.struct.toolList, " <-- toollist")
         print(self.struct.plantList, " <-- plantlist")
         print(self.struct.waterAccessList, " <-- waterAccessList")
         print(self.struct.plantTypeList, " <-- plantTypeList")
