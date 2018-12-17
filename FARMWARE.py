@@ -337,11 +337,12 @@ class MyFarmware():
         return (value > 400)
    
     def waterFall(self, mm): #<-- implement
-        self.water_on()
-        self.waiting(mm*100)
-        self.water_off()
-        return 
-        
+        try:
+            self.water_on()
+            self.waiting(mm*100)
+            self.water_off()
+        except Exception as error:
+            log("Water --> " + repr(error))
     def Write(self, pin, val, m):
         """
            pin : int 10 for vaccum (0 up to 69)
