@@ -111,20 +111,15 @@ class Structure():
     plantList = []                  #current plants
     potList = []                    #a list of pots. This is useful for watering.
     regionList = {}                 #a list of the regions... for specific tasks
-    toolList = {"seeder":[2676,1071,-368], "holer":[2676,871,-368], "waterSensor":[2676,971,-368]}
+    toolList = {"seeder":[0,0,0], "planter":[0,0,0], "soilSensor":[0,0,0]}
 
     def __init__(self):
-        log("Init - 0 --> structure", message_type='info')
         self.initPlantTypes()
-        log("Init - 1 --> structure", message_type='info')
         self.initFarmLayout()
-        log("Init - 2 --> structure", message_type='info')
         self.uWaterList(2)
-        log("Init - 3 --> structure", message_type='info')
         self.loadPlants()
-        log("Init - 4 --> structure", message_type='info')
         self.uRepotList()
-        log("Init - 5 --> structure", message_type='info')
+        self.initTools()
         
     ##TIME AND DATE FUNCTIONS
     def currDate(self):
@@ -224,6 +219,20 @@ class Structure():
             self.plantTypeList.append(PlantType(name, lightNeeded, gt0, gt1, gt2))
         log("Loaded plant types.", message_type='info')
            
+    def initTools(self):
+        filer = join(dirname(__file__), 'tools.xml')
+        try:
+            e = xml.etree.ElementTree.parse(filer).getroot()
+        except Exception as error:
+            log(repr(error))
+        log("Accessed tools.xml", message_type='info')
+        for tool in e:
+            ident = tool.attrib["ident"]
+            pos = [int(tool.attrib["x"]),int(tool.attrib["y"]),int(tool.attrib["z"])]   
+               
+            self.toolList[ident] = pos
+        log("Loaded plant types.", message_type='info')
+        
     def savePlants(self):
         log("Saving plant objects.", message_type='info')
         for plant in self.plantList:
@@ -306,15 +315,15 @@ class MyFarmware():
         #Sequence redaing pin value    
         ss = Sequence("40", "green")
         ss.add(log("Read pin {}.".format(pin), message_type='info'))
-        ss.add(self.Read(pin, signal,'Soil'))
+        ss.add(self.read(pin, signal,'Soil'))
         ss.add(log("Sensor read.", message_type='info'))
         send(cp.create_node(kind='execute', args=ss.sequence))
        
     def waterSensor(self):
         water = False
-        self.Reading(63,1)
+        self.reading(63,1)
         cp.wait(2000)
-        self.Reading(64,1)
+        self.reading(64,1)
         water = True    #<-- change to check soil sensor...
         return water
         
@@ -358,7 +367,7 @@ class MyFarmware():
         s.add(self.move(l[0] - 100, l[1], l[2], 50))
         s.add(log("Getting "+tool+".", message_type='info'))
         info = send(cp.create_node(kind='execute', args=s.sequence)) 
-        self.coords = l
+        self.coords = [l[0] -100, l[1],l[2]]
         return info
         
     def putTool(self, tool):
@@ -409,18 +418,19 @@ class MyFarmware():
     def water(self):
         whereWater = []
         l = self.struct.waterAccessList
-        self.getTool("waterSensor")
+        self.getTool("soilSensor")
         for i in l:
             self.goto(i[0], i[1], i[2])
-            sensor = waterSensor()
+            sensor = self.waterSensor()
             while sensor == False and self.coords[2] >= -100: #<-- insert proper floor value
                 s = Sequence("findWater", "green")
                 s.add(self.move(i[0], i[1], self.coords[2] - 20, 20))
                 s.add(log("Looking for water.", message_type='info'))
                 send(cp.create_node(kind='execute', args=s.sequence)) 
                 self.coords[2] -= 20
+                sensor = self.waterSensor()
             whereWater.append(i[2]-self.coords[2])
-        self.putTool("waterSensor")
+        self.putTool("soilSensor")
         
         for i in range(len(l)):
             if whereWater[i] > 0:
@@ -464,6 +474,7 @@ class MyFarmware():
         #self.s.plantList.append(Plant("plant1", potList[0].ident))
         #print(list(plant.id for plant in plantList))
         #savePlants()
+        print(self.struct.toolList, " <-- toollist")
         """
         print(self.struct.plantList, " <-- plantlist")
         print(self.struct.waterAccessList, " <-- waterAccessList")
