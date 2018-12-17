@@ -106,12 +106,12 @@ class Structure():
     ##LIST AND VARIABLE INITIALIZATIONS
     plantTypeList = []              #plant type repository for accessing data for growth needs
     waterList = []                  #[time]                --> when to water
-    waterAccessList = []             #[[Int,Int,Int]]       --> water access point coords
+    waterAccessList = [[1980,740,-320]]             #[[Int,Int,Int]]       --> water access point coords
     repotList = {}                  #dict[time] = [Plant]  --> when to repot a certain plant
     plantList = []                  #current plants
     potList = []                    #a list of pots. This is useful for watering.
     regionList = {}                 #a list of the regions... for specific tasks
-    toolList = {"water":[2676,871,-368], "seeder":[0,0,0], "holer":[2676,871,-368], "waterSensor":[0,0,0]}
+    toolList = {"seeder":[2676,1071,-368], "holer":[2676,871,-368], "waterSensor":[2676,971,-368]}
 
     def __init__(self):
         log("Init - 0 --> structure", message_type='info')
@@ -288,8 +288,33 @@ class MyFarmware():
         self.farmwarename = farmwarename
 
     ##FUNCTION CONTROL
+    def read(self, pin, mode, label):
+        """ pin : int 64 soil sensor
+            mode : 0 digital 1 analog
+            label : description str
+        """
+        
+        info = send(cp.read_pin(number=pin, mode=mode, label = label))
+        return info
+        
+    def reading(self, pin, signal ):
+        """
+            pin : int pin number
+            signal : 1 analog   /   0 digital
+        """
+
+        #Sequence redaing pin value    
+        ss = Sequence("40", "green")
+        ss.add(log("Read pin {}.".format(pin), message_type='info'))
+        ss.add(self.Read(pin, signal,'Soil'))
+        ss.add(log("Sensor read.", message_type='info'))
+        send(cp.create_node(kind='execute', args=ss.sequence))
+       
     def waterSensor(self):
         water = False
+        self.Reading(63,1)
+        cp.wait(2000)
+        self.Reading(64,1)
         water = True    #<-- change to check soil sensor...
         return water
         
@@ -382,7 +407,6 @@ class MyFarmware():
               
     ##SEQUENCES   
     def water(self):
-        """
         whereWater = []
         l = self.struct.waterAccessList
         self.getTool("waterSensor")
@@ -397,13 +421,11 @@ class MyFarmware():
                 self.coords[2] -= 20
             whereWater.append(i[2]-self.coords[2])
         self.putTool("waterSensor")
-        """
-        self.getTool("water")
+        
         for i in range(len(l)):
             if whereWater[i] > 0:
                 self.goto(l[i][0], l[i][1], l[i][2])
                 self.waterFall(whereWater[i])
-        self.putTool("water")
     
     def repot(self):
         return            
