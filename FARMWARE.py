@@ -464,8 +464,8 @@ class MyFarmware():
         self.struct = Structure()
         log("Data loaded.", message_type='info')
         
-        self.water()
-        #log(str(self.waterSensor()), message_type='info')
+        #self.water()
+        log(str(self.waterSensor()), message_type='info')
         #self.calibrate()
         
         log("Test successful.", message_type='info')
