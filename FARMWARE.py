@@ -227,14 +227,16 @@ class Structure():
     def savePlants(self):
         log("Saving plant objects.", message_type='info')
         for plant in self.plantList:
-            f = open("./plants/" + plant.id + ".txt" , "wb")
+            fname = plant.id + ".txt"
+            filer = join(dirname(__file__), 'plants', fname)
+            f = open(filer, "wb")
             pickle.dump(plant, f)
             f.close()
         log("Saved plant objects.", message_type='info')
             
     def loadPlants(self):
         log("Loading plant objects.", message_type='info')
-        for file in os.listdir("./plants"):
+        for file in os.listdir(join(dirname(__file__), 'plants')):
             if file != "save.txt":
                 if file.endswith(".txt"):
                     f = open("./plants/" + file, "rb")
