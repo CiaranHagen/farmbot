@@ -111,7 +111,7 @@ class Structure():
     plantList = []                  #current plants
     potList = []                    #a list of pots. This is useful for watering.
     regionList = {}                 #a list of the regions... for specific tasks
-    toolList = {"water":[0,0,0], "seeder":[0,0,0], "holer":[0,0,0], "waterSensor":[0,0,0]}
+    toolList = {"water":[2676,871,-370], "seeder":[0,0,0], "holer":[2676,871,-370], "waterSensor":[0,0,0]}
 
     def __init__(self):
         log("Init - 0 --> structure", message_type='info')
@@ -347,36 +347,38 @@ class MyFarmware():
         self.coords = l
         
     def calibrate(self):
-        try:
-            i = 0
-            while True and i<21:
+        i = 0
+        while True and i<21:
+            try:
                 s = Sequence("xCalib", "green")
                 s.add(self.moveRel(100,0,0,50))
                 s.add(log("Calibrating  x axis.", message_type='info'))
                 send(cp.create_node(kind='execute', args=s.sequence)) 
                 i += 1
-        except:
-            pass
-        try:
-            i = 0
-            while True and i<14:
+            except:
+                break
+        
+        i = 0
+        while True and i<14:
+            try:
                 s = Sequence("yCalib", "green")
                 s.add(self.moveRel(0,100,0,50))
                 s.add(log("Calibrating  y axis.", message_type='info'))
                 send(cp.create_node(kind='execute', args=s.sequence)) 
                 i += 1
-        except:
-            pass
-        try:
-            i = 0
-            while True and i<4:
+            except:
+                break
+        
+        i = 0
+        while True and i<4:
+            try:
                 s = Sequence("zCalib", "green")
                 s.add(self.moveRel(0,0,100,50))
                 s.add(log("Calibrating  z axis.", message_type='info'))
                 send(cp.create_node(kind='execute', args=s.sequence)) 
                 i += 1
-        except:
-            pass 
+            except:
+                break
               
     ##SEQUENCES   
     def water(self):
@@ -438,7 +440,7 @@ class MyFarmware():
         #self.s.plantList.append(Plant("plant1", potList[0].ident))
         #print(list(plant.id for plant in plantList))
         #savePlants()
-        
+        """
         print(self.struct.plantList, " <-- plantlist")
         print(self.struct.waterAccessList, " <-- waterAccessList")
         print(self.struct.plantTypeList, " <-- plantTypeList")
@@ -447,7 +449,7 @@ class MyFarmware():
         print(self.struct.potList, " <-- potList")
         print(self.struct.regionList, " <-- regionList")
         print(self.struct.toolList, " <-- toolList")
-        
+        """
         #loadPlants()
         #print(list(plant.id for plant in plantList))
         
