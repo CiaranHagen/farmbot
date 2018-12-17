@@ -320,12 +320,15 @@ class MyFarmware():
         send(cp.create_node(kind='execute', args=ss.sequence))
        
     def waterSensor(self):
-        water = False
-        self.reading(63,0)
-        self.waiting(2000)
-        self.reading(64,1)
-        water = True    #<-- change to check soil sensor...
-        return water
+        try:
+            water = False
+            self.reading(63,0)
+            self.waiting(2000)
+            self.reading(64,1)
+            water = True    #<-- change to check soil sensor...
+            return water
+        except Exception as error:
+            log(repr(error))
         
     def waterFall(self, mm): #<-- implement
         return 
