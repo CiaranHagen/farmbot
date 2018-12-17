@@ -111,7 +111,7 @@ class Structure():
     plantList = []                  #current plants
     potList = []                    #a list of pots. This is useful for watering.
     regionList = {}                 #a list of the regions... for specific tasks
-    toolList = {"water":[2676,871,-370], "seeder":[0,0,0], "holer":[2676,871,-370], "waterSensor":[0,0,0]}
+    toolList = {"water":[2676,871,-368], "seeder":[0,0,0], "holer":[2676,871,-368], "waterSensor":[0,0,0]}
 
     def __init__(self):
         log("Init - 0 --> structure", message_type='info')
