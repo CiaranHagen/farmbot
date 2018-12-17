@@ -353,7 +353,7 @@ class MyFarmware():
     def waiting(self,time):
         log("Waiting {} ms".format(time), message_type='debug')
         info = send(cp.wait(milliseconds=time))
-           return info
+        return info
     
     def goto(self, x, y, z):
         s = Sequence("goto", "green")
