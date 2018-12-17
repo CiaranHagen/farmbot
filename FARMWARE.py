@@ -351,9 +351,12 @@ class MyFarmware():
         return info
         
     def waiting(self,time):
-        log("Waiting {} ms".format(time), message_type='debug')
-        info = send(cp.wait(milliseconds=time))
-        return info
+        try:
+            log("Waiting {} ms".format(time), message_type='debug')
+            info = send(cp.wait(milliseconds=time))
+            return info
+        except Exception as error:
+            log(repr(error))
     
     def goto(self, x, y, z):
         s = Sequence("goto", "green")
