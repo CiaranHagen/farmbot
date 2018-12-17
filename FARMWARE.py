@@ -449,10 +449,10 @@ class MyFarmware():
         
         #self.water()
         log(str(self.waterSensor()), message_type='info')
-        self.calibrate()
+        #self.calibrate()
         
         log("Test successful.", message_type='info')
-        print(self.coords)
+        #print(self.coords)
         
         ##TESTS
         
