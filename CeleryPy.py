@@ -387,7 +387,7 @@ def take_photo():
     return _take_photo
 
 
-@_print_json
+#@_print_json
 def wait(milliseconds=0):
     """Celery Script to wait.
 

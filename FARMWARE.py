@@ -446,6 +446,7 @@ class MyFarmware():
                 send(cp.create_node(kind='execute', args=s.sequence)) 
                 self.coords[2] -= 20
                 sensor = self.waterSensor()
+                self.waiting(2000)
             whereWater.append(i[2]-self.coords[2])
         self.putTool("soilSensor")
         
