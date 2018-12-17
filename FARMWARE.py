@@ -334,7 +334,7 @@ class MyFarmware():
         #posx = bot_state['location_data']['position']['x']
         value = bot_state['pins']['64']['value']
         log(str(value), message_type='info')
-        return (value > 1000)
+        return (value > 400)
    
     def waterFall(self, mm): #<-- implement
         return 
@@ -441,12 +441,13 @@ class MyFarmware():
             sensor = self.waterSensor()
             while sensor == False and self.coords[2] >= -400: #<-- insert proper floor value
                 s = Sequence("findWater", "green")
-                s.add(self.move(i[0], i[1], self.coords[2] - 20, 20))
+                s.add(self.move(i[0], i[1], self.coords[2] - 10, 20))
                 s.add(log("Looking for water.", message_type='info'))
                 send(cp.create_node(kind='execute', args=s.sequence)) 
-                self.coords[2] -= 20
+                self.coords[2] -= 10
                 sensor = self.waterSensor()
                 self.waiting(2000)
+            
             whereWater.append(i[2]-self.coords[2])
         self.putTool("soilSensor")
         
