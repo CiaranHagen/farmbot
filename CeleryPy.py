@@ -324,7 +324,7 @@ def write_pin(number=0, value=0, mode=0):
     return _write_pin
 
 
-@_print_json
+#@_print_json
 def read_pin(number=0, mode=0, label='---'):
     """Celery Script to read the value of a pin.
 
