@@ -321,7 +321,7 @@ class MyFarmware():
        
     def waterSensor(self):
         water = False
-        self.reading(63,1)
+        self.reading(63,0)
         cp.wait(2000)
         self.reading(64,1)
         water = True    #<-- change to check soil sensor...
@@ -447,8 +447,8 @@ class MyFarmware():
         self.struct = Structure()
         log("Data loaded.", message_type='info')
         
-        self.water()
-        
+        #self.water()
+        log(str(self.waterSensor()), message_type='info')
         self.calibrate()
         
         log("Test successful.", message_type='info')
