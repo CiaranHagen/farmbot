@@ -206,8 +206,11 @@ class Structure():
         log("Loaded pot layout.", message_type='info')
 
     def initPlantTypes(self):
-        log("Present o)", message_type='info')
-        e = xml.etree.ElementTree.parse('./plantTypes.xml').getroot()
+        log("Present.", message_type='info')
+        try:
+            e = xml.etree.ElementTree.parse('./plantTypes.xml').getroot()
+        except Exception as error:
+            log(repr(error))
         log("Accessed plantTypes.xml", message_type='info')
         for plantType in e:
             name = plantType.attrib["name"]
