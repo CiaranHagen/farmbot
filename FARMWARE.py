@@ -337,8 +337,56 @@ class MyFarmware():
         return (value > 400)
    
     def waterFall(self, mm): #<-- implement
+        self.water_on()
+        self.waiting(mm*100)
+        self.water_off()
         return 
         
+    def Write(self, pin, val, m):
+    """
+       pin : int 10 for vaccum (0 up to 69)
+       val : 1 on / 0 off
+       m   : 0 digital / 1 analog
+    """
+    # or send(...)
+    info = send(cp.write_pin(number=pin, value=val , mode=m))
+       return info
+
+   def vacuum_on(self):
+    #Sequence0 vaccum on
+    on = Sequence("0", "green")
+    on.add(log("Vaccum on ", message_type='info'))
+    #on.add(self.waiting(5000))
+    #on.add(log("waiting ok", message_type='info'))
+    on.add(self.Write(10,1,0))
+    send(cp.create_node(kind='execute', args=on.sequence))
+
+   def vacuum_off(self):
+    #Sequence01 vaccum off
+    off = Sequence("01", "green")
+    off.add(log("Vaccum off ", message_type='info'))
+    #off.add(self.waiting(5000))
+    #off.add(log("waiting ok", message_type='info'))
+    off.add(self.Write(10,0,0))
+    send(cp.create_node(kind='execute', args=off.sequence))    
+
+   def water_on(self):
+    #Sequence01 vaccum off
+    won = Sequence("02", "green")
+    #off.add(self.waiting(5000))
+    #off.add(log("waiting ok", message_type='info'))
+    won.add(self.Write(9,1,0))
+    won.add(log("Water on ", message_type='info'))
+    send(cp.create_node(kind='execute', args=won.sequence))    
+
+   def water_off(self):
+    #Sequence01 vaccum off
+    wof = Sequence("03", "green")
+    #off.add(self.waiting(5000))
+    #off.add(log("waiting ok", message_type='info'))
+    wof.add(self.Write(9,0,0))
+    wof.add(log("Water off ", message_type='info'))
+    send(cp.create_node(kind='execute', args=wof.sequence))
         
     ##MOVEMENT
     def moveRel(self, distx, disty, distz, spd):
@@ -358,7 +406,7 @@ class MyFarmware():
         log("going to " + str(posx) + ", " + str(posy) + ", " + str(posz), message_type='debug')
         info = send(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
         return info
-        
+    
     def waiting(self,time):
         try:
             log("Waiting {} ms".format(time), message_type='debug')
