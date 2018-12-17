@@ -516,7 +516,7 @@ class MyFarmware():
         log("Data loaded.", message_type='info')
         #self.goto(0,0,0)
         #self.water()
-        self.waterfall(15)
+        self.waterFall(15)
         #log(str(self.waterSensor()), message_type='info')
         #self.calibrate()
         
