@@ -330,7 +330,7 @@ class MyFarmware():
         l = self.struct.toolList[tool]
         s = Sequence("getTool", "green")
         s.add(self.goto(l[0] , l[1], l[2]))
-        s.add(self.move(l[0] + 100, l[1], l[2], 50))
+        s.add(self.move(l[0] - 100, l[1], l[2], 50))
         s.add(log("Getting "+tool+".", message_type='info'))
         info = send(cp.create_node(kind='execute', args=s.sequence)) 
         self.coords = l
@@ -339,7 +339,7 @@ class MyFarmware():
     def putTool(self, tool):
         l = self.struct.toolList[tool]
         s = Sequence("putTool", "green")
-        s.add(self.goto(l[0] + 100 , l[1], l[2]))
+        s.add(self.goto(l[0] - 100 , l[1], l[2]))
         s.add(self.move(l[0], l[1], l[2], 50))
         s.add(self.move(l[0], l[1], l[2] + 100, 50))
         s.add(log("Putting back "+tool+".", message_type='info'))
@@ -351,7 +351,7 @@ class MyFarmware():
         while True and i<21:
             try:
                 s = Sequence("xCalib", "green")
-                s.add(self.moveRel(100,0,0,50))
+                s.add(self.moveRel(-100,0,0,50))
                 s.add(log("Calibrating  x axis.", message_type='info'))
                 send(cp.create_node(kind='execute', args=s.sequence)) 
                 i += 1
@@ -362,7 +362,7 @@ class MyFarmware():
         while True and i<14:
             try:
                 s = Sequence("yCalib", "green")
-                s.add(self.moveRel(0,100,0,50))
+                s.add(self.moveRel(0,-100,0,50))
                 s.add(log("Calibrating  y axis.", message_type='info'))
                 send(cp.create_node(kind='execute', args=s.sequence)) 
                 i += 1
