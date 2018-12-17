@@ -382,6 +382,7 @@ class MyFarmware():
               
     ##SEQUENCES   
     def water(self):
+        """
         whereWater = []
         l = self.struct.waterAccessList
         self.getTool("waterSensor")
@@ -396,6 +397,7 @@ class MyFarmware():
                 self.coords[2] -= 20
             whereWater.append(i[2]-self.coords[2])
         self.putTool("waterSensor")
+        """
         self.getTool("water")
         for i in range(len(l)):
             if whereWater[i] > 0:
