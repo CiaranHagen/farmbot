@@ -322,7 +322,7 @@ class MyFarmware():
     def waterSensor(self):
         water = False
         self.reading(63,0)
-        cp.wait(2000)
+        self.waiting(2000)
         self.reading(64,1)
         water = True    #<-- change to check soil sensor...
         return water
@@ -349,6 +349,11 @@ class MyFarmware():
         log("going to " + str(posx) + ", " + str(posy) + ", " + str(posz), message_type='debug')
         info = send(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
         return info
+        
+    def waiting(self,time):
+        log("Waiting {} ms".format(time), message_type='debug')
+        info = send(cp.wait(milliseconds=time))
+           return info
     
     def goto(self, x, y, z):
         s = Sequence("goto", "green")
@@ -499,7 +504,7 @@ class MyFarmware():
                 del self.s.repotList[currHour] 
                 
             currMin = int(self.s.currTime().split(":")[1])  
-            send(cp.wait((59 - currMin)*60*1000)) #59 instead of 60 as safety
+            self.waiting((59 - currMin)*60*1000) #59 instead of 60 as safety
             
             
             
