@@ -390,8 +390,8 @@ class MyFarmware():
     def putTool(self, tool):
         l = self.struct.toolList[tool]
         s = Sequence("putTool", "green")
-        s.add(self.goto(l[0] - 100 , l[1], l[2]))
-        s.add(self.move(l[0], l[1], l[2], 50))
+        s.add(self.goto(l[0] - 100 , l[1], l[2]-2))
+        s.add(self.move(l[0], l[1], l[2]-2, 50))
         s.add(self.move(l[0], l[1], l[2] + 100, 50))
         s.add(log("Putting back "+tool+".", message_type='info'))
         send(cp.create_node(kind='execute', args=s.sequence)) 
@@ -439,7 +439,7 @@ class MyFarmware():
         for i in l:
             self.goto(i[0], i[1], i[2])
             sensor = self.waterSensor()
-            while sensor == False and self.coords[2] >= -100: #<-- insert proper floor value
+            while sensor == False and self.coords[2] >= -400: #<-- insert proper floor value
                 s = Sequence("findWater", "green")
                 s.add(self.move(i[0], i[1], self.coords[2] - 20, 20))
                 s.add(log("Looking for water.", message_type='info'))
@@ -463,7 +463,7 @@ class MyFarmware():
         log("Farmware running...", message_type='info')
         self.struct = Structure()
         log("Data loaded.", message_type='info')
-        
+        self.goto(0,0,0)
         self.water()
         #log(str(self.waterSensor()), message_type='info')
         #self.calibrate()
