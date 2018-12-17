@@ -513,8 +513,9 @@ class MyFarmware():
         log("Farmware running...", message_type='info')
         self.struct = Structure()
         log("Data loaded.", message_type='info')
-        self.goto(0,0,0)
-        self.water()
+        #self.goto(0,0,0)
+        #self.water()
+        self.waterfall(15)
         #log(str(self.waterSensor()), message_type='info')
         #self.calibrate()
         

@@ -305,7 +305,7 @@ def if_statement(lhs='x', op='is', rhs=0, _then=None, _else=None):
     return _if_statement
 
 
-@_print_json
+#@_print_json
 def write_pin(number=0, value=0, mode=0):
     """Celery Script to write a value to a pin.
 
