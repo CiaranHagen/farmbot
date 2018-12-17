@@ -1,4 +1,4 @@
-import time, os
+import time, os, json, requests
 import pickle
 import xml.etree.ElementTree
 from farmware_tools import log
@@ -322,12 +322,19 @@ class MyFarmware():
         send(cp.create_node(kind='execute', args=ss.sequence))
        
     def waterSensor(self):
-        water = False
         self.reading(63,0)
         self.waiting(2000)
         self.reading(64,1)
-        water = True    #<-- change to check soil sensor...
-        return water
+        
+        headers = {'Authorization': 'bearer {}'.format(os.environ['FARMWARE_TOKEN']), 'content-type': "application/json"}
+
+        response = requests.get(os.environ['FARMWARE_URL'] + 'api/v1/bot/state', headers=headers)
+
+        bot_state = response.json()
+        #posx = bot_state['location_data']['position']['x']
+        value = bot_state['pins']['64']['value']
+        log(str(value), message_type='info')
+        return (value > 1000)
    
     def waterFall(self, mm): #<-- implement
         return 
