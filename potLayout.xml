@@ -2,4 +2,8 @@
     <region id="1" gs="1" x1="12" y1="0" x2="22" y2="10">
         <pot id="0" x="0" y="0" z="0"/>
     </region>
+    <region id="2" gs="0" x1="0" y1="5" x2="10" y2="20">
+        <bac x1="0" x2="5" y1="10" y2="15" z="-300" border="20" dist="30"/>
+        <bac x1="0" x2="5" y1="10" y2="15" z="-300" border="20" dist="30"/>
+    </region>
 </farmbot>
