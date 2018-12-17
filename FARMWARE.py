@@ -359,7 +359,7 @@ class MyFarmware():
             info = send(cp.wait(milliseconds=time))
             return info
         except Exception as error:
-            log(repr(error))
+            log("Wait --> " + repr(error))
     
     def goto(self, x, y, z):
         s = Sequence("goto", "green")
