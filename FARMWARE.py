@@ -302,9 +302,11 @@ class MyFarmware():
             mode : 0 digital 1 analog
             label : description str
         """
-        
-        info = send(cp.read_pin(number=pin, mode=mode, label = label))
-        return info
+        try:
+            info = send(cp.read_pin(number=pin, mode=mode, label = label))
+            return info
+        except Exception as error:
+            log("Read --> " + repr(error))
         
     def reading(self, pin, signal ):
         """
@@ -323,13 +325,10 @@ class MyFarmware():
         water = False
         self.reading(63,0)
         self.waiting(2000)
-        try:
-            self.reading(64,1)
-            water = True    #<-- change to check soil sensor...
-            return water
-        except Exception as error:
-            log(repr(error))
-        
+        self.reading(64,1)
+        water = True    #<-- change to check soil sensor...
+        return water
+   
     def waterFall(self, mm): #<-- implement
         return 
         
