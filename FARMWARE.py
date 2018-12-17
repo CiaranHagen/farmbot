@@ -4,7 +4,7 @@ import xml.etree.ElementTree
 from farmware_tools import log
 from farmware_tools import send_celery_script as send
 import CeleryPy as cp
-
+from os.path import dirname, join
 
 ##List of functions and classes for ease of use
 """
@@ -169,7 +169,8 @@ class Structure():
         
     ##INITIALIZATION FUNCTIONS
     def initFarmLayout(self):
-        e = xml.etree.ElementTree.parse('./potLayout.xml').getroot()
+        filer = join(dirname(__file__), 'potLayout.xml')
+        e = xml.etree.ElementTree.parse(filer).getroot()
         log("Accessed potLayout.xml", message_type='struct')
         for region in e:
             #init regions
@@ -206,9 +207,10 @@ class Structure():
         log("Loaded pot layout.", message_type='info')
 
     def initPlantTypes(self):
+        filer = join(dirname(__file__), 'plantTypes.xml')
         log("Present.", message_type='info')
         try:
-            e = xml.etree.ElementTree.parse('./plantTypes.xml').getroot()
+            e = xml.etree.ElementTree.parse(filer).getroot()
         except Exception as error:
             log(repr(error))
         log("Accessed plantTypes.xml", message_type='info')
