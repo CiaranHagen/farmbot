@@ -1,4 +1,0 @@
-This is a file whose sole purpose in life is to keep the plants directory from dissapearing from GitHub...
-It feels loved.
-
--- It's creator.

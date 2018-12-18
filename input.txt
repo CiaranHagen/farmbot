@@ -1,0 +1,2 @@
+20 plant1
+5 plant2

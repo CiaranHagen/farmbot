@@ -41,7 +41,7 @@ sendMail(kind) --> kind defines which message to send
 
 ##CLASSES
 class PlantType():
-    def __init__(self, name, lightNeeded, growthTimeS, growthTimeP, growthTimeF):
+    def __init__(self, name, hole, growthTimeS, growthTimeP, growthTimeF, seedx, seedy, seedz):
         """
         name : string
         lightNeeded : int (lumen)
@@ -50,11 +50,14 @@ class PlantType():
         growthTimeP : int (days)
         growthTimeF : int (days)
         """
+        self.hole = hole
         self.name = name
-        self.lightNeeded = lightNeeded
         self.growthTime0 = growthTimeS
         self.growthTime1 = growthTimeP
         self.growthTime2 = growthTimeF
+        self.x = seedx
+        self.y = seedy
+        self.z = seedz
         
 class Plant():
     growthStage = 0
@@ -86,9 +89,10 @@ class Pot():
         """
         self.region = region
         self.ident = ident
-        self.point = cp.add_point(posx, posy, posz, 1)
-    
-
+        self.x = posx
+        self.y = posy
+        self.z = posz
+        
 class Region():
     def __init__(self, ident, gs, position):
         """
@@ -118,6 +122,7 @@ class Structure():
         self.initFarmLayout()
         self.uWaterList(2)
         self.loadPlants()
+        self.loadPots()
         self.uRepotList()
         self.initTools()
         
@@ -189,9 +194,9 @@ class Structure():
                     border = int(bac.attrib["border"])
                     dist = int(bac.attrib["dist"])
                     
-                    for i in range(x1 + border, x2 - border + 1, dist):
-                        for j in range(y1 + border, y2 - border + 1, dist):
-                            pot = Pot(self.regionList[region.attrib["id"]], i, j, z)
+                    for i in range(x1 + border, x2 - border, dist):
+                        for j in range(y1 + border, y2 - border, dist):
+                            pot = Pot(region.attrib["id"] + "," + str(i) + "," + str(j), self.regionList[region.attrib["id"]], i, j, z)
                             self.potList.append(pot)
                             
             else:
@@ -203,7 +208,6 @@ class Structure():
 
     def initPlantTypes(self):
         filer = join(dirname(__file__), 'plantTypes.xml')
-        log("Present.", message_type='info')
         try:
             e = xml.etree.ElementTree.parse(filer).getroot()
         except Exception as error:
@@ -211,12 +215,19 @@ class Structure():
         log("Accessed plantTypes.xml", message_type='info')
         for plantType in e:
             name = plantType.attrib["name"]
-            lightNeeded = int(plantType.attrib["lightNeeded"])
+            if int(plantType.attrib["hole"]) == 1:
+                hole = True
+            else:
+                hole = False
             gt0 = int(plantType.attrib["gt0"])
             gt1 = int(plantType.attrib["gt1"])        
-            gt2 = int(plantType.attrib["gt2"])     
+            gt2 = int(plantType.attrib["gt2"]) 
+            seedx = int(plantType.attrib["x"])
+            seedy = int(plantType.attrib["y"])
+            seedz  = int(plantType.attrib["z"])
                
-            self.plantTypeList.append(PlantType(name, lightNeeded, gt0, gt1, gt2))
+               
+            self.plantTypeList.append(PlantType(name, hole, gt0, gt1, gt2, seedx, seedy, seedz))
         log("Loaded plant types.", message_type='info')
            
     def initTools(self):
@@ -234,7 +245,6 @@ class Structure():
         log("Loaded plant types.", message_type='info')
         
     def savePlants(self):
-        log("Saving plant objects.", message_type='info')
         for plant in self.plantList:
             fname = plant.id + ".txt"
             filer = join(dirname(__file__), 'plants', fname)
@@ -244,7 +254,6 @@ class Structure():
         log("Saved plant objects.", message_type='info')
             
     def loadPlants(self):
-        log("Loading plant objects.", message_type='info')
         for file in os.listdir(join(dirname(__file__), 'plants')):
             if file != "save.txt":
                 if file.endswith(".txt"):
@@ -253,6 +262,25 @@ class Structure():
                     self.plantList.append(plant)
                     f.close()
         log("Loaded plant objects.", message_type='info')
+        
+    def savePots(self):
+        for pot in self.potList:
+            fname = pot.ident + ".txt"
+            filer = join(dirname(__file__), 'pots', fname)
+            f = open(filer, "wb")
+            pickle.dump(pot, f)
+            f.close()
+        log("Saved pot objects.", message_type='info')
+            
+    def loadPots(self):
+        for file in os.listdir(join(dirname(__file__), 'pots')):
+            if file != "save.txt":
+                if file.endswith(".txt"):
+                    f = open("./pots/" + file, "rb")
+                    pot = pickle.Unpickler(f).load()
+                    self.potList.append(pot)
+                    f.close()
+        log("Loaded pot objects.", message_type='info')
         
     ##SEND MAIL FUNCTION(S)
     def sendMail(self, kind):
@@ -314,7 +342,7 @@ class MyFarmware():
             signal : 1 analog   /   0 digital
         """
 
-        #Sequence redaing pin value    
+        #Sequence reading pin value    
         ss = Sequence("40", "green")
         ss.add(log("Read pin {}.".format(pin), message_type='info'))
         ss.add(self.read(pin, signal,'Soil'))
@@ -331,7 +359,6 @@ class MyFarmware():
         response = requests.get(os.environ['FARMWARE_URL'] + 'api/v1/bot/state', headers=headers)
 
         bot_state = response.json()
-        #posx = bot_state['location_data']['position']['x']
         value = bot_state['pins']['64']['value']
         log(str(value), message_type='info')
         return (value > 400)
@@ -349,42 +376,29 @@ class MyFarmware():
            val : 1 on / 0 off
            m   : 0 digital / 1 analog
         """
-        # or send(...)
         info = send(cp.write_pin(number=pin, value=val , mode=m))
         return info
 
     def vacuum_on(self):
-        #Sequence0 vaccum on
         on = Sequence("0", "green")
         on.add(log("Vaccum on ", message_type='info'))
-        #on.add(self.waiting(5000))
-        #on.add(log("waiting ok", message_type='info'))
         on.add(self.Write(10,1,0))
         send(cp.create_node(kind='execute', args=on.sequence))
 
     def vacuum_off(self):
-        #Sequence01 vaccum off
         off = Sequence("01", "green")
         off.add(log("Vaccum off ", message_type='info'))
-        #off.add(self.waiting(5000))
-        #off.add(log("waiting ok", message_type='info'))
         off.add(self.Write(10,0,0))
         send(cp.create_node(kind='execute', args=off.sequence))    
 
     def water_on(self):
-        #Sequence01 vaccum off
         won = Sequence("02", "green")
-        #off.add(self.waiting(5000))
-        #off.add(log("waiting ok", message_type='info'))
         won.add(self.Write(9,1,0))
         won.add(log("Water on ", message_type='info'))
         send(cp.create_node(kind='execute', args=won.sequence))    
 
     def water_off(self):
-        #Sequence01 vaccum off
         wof = Sequence("03", "green")
-        #off.add(self.waiting(5000))
-        #off.add(log("waiting ok", message_type='info'))
         wof.add(self.Write(9,0,0))
         wof.add(log("Water off ", message_type='info'))
         send(cp.create_node(kind='execute', args=wof.sequence))
@@ -486,7 +500,7 @@ class MyFarmware():
         l = self.struct.waterAccessList
         self.getTool("soilSensor")
         for i in l:
-            self.goto(i[0], i[1], i[2])
+            self.goto(i[0], i[1], i[2]+78)
             sensor = self.waterSensor()
             while sensor == False and self.coords[2] >= -400: #<-- insert proper floor value
                 s = Sequence("findWater", "green")
@@ -497,7 +511,7 @@ class MyFarmware():
                 sensor = self.waterSensor()
                 self.waiting(2000)
             
-            whereWater.append(i[2]-self.coords[2])
+            whereWater.append(i[2]+78-self.coords[2])
         self.putTool("soilSensor")
         
         for i in range(len(l)):
@@ -505,6 +519,54 @@ class MyFarmware():
                 self.goto(l[i][0], l[i][1], l[i][2])
                 self.waterFall(whereWater[i])
     
+    def makePlant(self, pot, tplant):
+        if pot.plant == None:
+            plantTyper = next(y for y in self.struct.plantTypeList if y.name == tplant)
+            plant = Plant(plantTyper, pot)
+            log("Planting " + tplant + " in pot " + pot.ident, message_type='info')
+            pot.plant = plant
+            self.struct.plantList.append(plant)
+            if plant.kind.hole:
+                return None,plant
+            else:
+                return plant, plant
+                
+    def plant(self):
+        filer = join(dirname(__file__), 'input.txt')
+        holeL = []
+        plantL = []
+        readL = []
+        f = open(filer, "rb")
+        for line in f:
+            line = line.split()
+            readL.append((line[0],line[1]))
+        f.close()
+        
+        for p in readL:
+            for z in range(int(p[0])):
+                potter = next((pot for pot in self.struct.potList if pot.plant == None), None)
+                x = self.makePlant(potter, p[1])
+                if x[0] != None:
+                    holeL.append(x[0])
+                plantL.append(x[1])
+                
+        self.struct.savePlants()
+        self.struct.savePots()
+        self.getTool("planter")
+        for p in holeL:
+            self.goto(p.pot.x, p.pot.y, p.pot.z)   
+        self.putTool("planter")
+        self.getTool("seeder")
+        for p in plantL:
+            self.goto(p.kind.x, p.kind.y, p.kind.z)
+            self.vacuum_on()
+            self.goto(p.pot.x, p.pot.y, p.pot.z + 75)
+            self.vacuum_off()
+        self.putTool("seeder")
+        
+        #f = open(filer, "wb")
+        #f.close()
+        
     def repot(self):
         return            
               
@@ -514,15 +576,13 @@ class MyFarmware():
         log("Farmware running...", message_type='info')
         self.struct = Structure()
         log("Data loaded.", message_type='info')
-        #self.goto(0,0,0)
+        
+        self.goto(0,0,0)
         self.water()
-        #self.waterFall(15)
-        #log(str(self.waterSensor()), message_type='info')
-        #self.calibrate()
+        self.plant()
         
         log("Test successful.", message_type='info')
-        #print(self.coords)
-        
+                
         ##TESTS
         
         #self.s.sendMail(0)
@@ -545,7 +605,7 @@ class MyFarmware():
         print(self.struct.plantTypeList, " <-- plantTypeList")
         print(self.struct.waterList, " <-- waterList")
         print(self.struct.repotList, " <-- repotList")
-        print(self.struct.potList, " <-- potList")
+        print(len(self.struct.potList), " <-- potList")
         print(self.struct.regionList, " <-- regionList")
         print(self.struct.toolList, " <-- toolList")
         """
