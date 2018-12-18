@@ -564,8 +564,8 @@ class MyFarmware():
             self.vacuum_off()
         self.putTool("seeder")
         
-        #f = open(filer, "wb")
-        #f.close()
+        f = open(filer, "wb")
+        f.close()
         
     def repot(self):
         return            
