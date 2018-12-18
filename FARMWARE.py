@@ -568,7 +568,7 @@ class MyFarmware():
         for p in plantL:
             self.goto(p.kind.x, p.kind.y, p.kind.z)
             self.vacuum_on()
-            self.goto(p.pot.x, p.pot.y, p.pot.z + 75)
+            self.goto(p.pot.x + 15, p.pot.y, p.pot.z + 75)
             self.vacuum_off()
         self.putTool("seeder")
         
