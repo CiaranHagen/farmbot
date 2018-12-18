@@ -94,7 +94,7 @@ class Pot():
         self.z = posz
         
 class Region():
-    def __init__(self, ident, gs, position):
+    def __init__(self, ident, gs, position, xw, yw, zw):
         """
         gs : int
         position : ((<x1>,<y1>),(<x2>,<y2>))
@@ -103,6 +103,9 @@ class Region():
         self.growthStage = gs
         self.position = position
         self.ident = ident
+        self.xWater = xw
+        self.yWater = yw
+        self.zWater = zw
 
 
 class Structure():
@@ -110,7 +113,7 @@ class Structure():
     ##LIST AND VARIABLE INITIALIZATIONS
     plantTypeList = []              #plant type repository for accessing data for growth needs
     waterList = []                  #[time]                --> when to water
-    waterAccessList = [[1980,740,-320]]             #[[Int,Int,Int]]       --> water access point coords
+    waterAccessList = []             #[[Int,Int,Int]]       --> water access point coords
     repotList = {}                  #dict[time] = [Plant]  --> when to repot a certain plant
     plantList = []                  #current plants
     potList = []                    #a list of pots. This is useful for watering.
@@ -180,8 +183,12 @@ class Structure():
             y2 = int(region.attrib["y2"])
             gs = int(region.attrib["gs"])
             ident = int(region.attrib["id"])
+            xw = int(region.attrib["xw"])
+            yw = int(region.attrib["yw"])
+            zw = int(region.attrib["zw"])
             
-            self.regionList[region.attrib["id"]] = Region(ident, gs, ((x1, y1), (x2, y2)))
+            self.regionList[region.attrib["id"]] = Region(ident, gs, ((x1, y1), (x2, y2)), xw, yw, zw)
+            self.waterAccessList.append([xw, yw, zw])
             
             if region.attrib["gs"] == "0":
                 #init bacs in region 0
@@ -420,6 +427,7 @@ class MyFarmware():
         """
         log("going to " + str(posx) + ", " + str(posy) + ", " + str(posz), message_type='debug')
         info = send(cp.move_absolute(location=[posx, posy, posz], offset=[0,0,0], speed=spd))
+        self.coords = [posx, posy, posz]
         return info
     
     def waiting(self,time):
@@ -502,7 +510,7 @@ class MyFarmware():
         for i in l:
             self.goto(i[0], i[1], i[2]+78)
             sensor = self.waterSensor()
-            while sensor == False and self.coords[2] >= -400: #<-- insert proper floor value
+            while sensor == False and self.coords[2] >= -500: #<-- insert proper floor value
                 s = Sequence("findWater", "green")
                 s.add(self.move(i[0], i[1], self.coords[2] - 10, 20))
                 s.add(log("Looking for water.", message_type='info'))
@@ -521,7 +529,7 @@ class MyFarmware():
     
     def makePlant(self, pot, tplant):
         if pot.plant == None:
-            plantTyper = next(y for y in self.struct.plantTypeList if y.name == tplant)
+            plantTyper = next((y for y in self.struct.plantTypeList if y.name == tplant), None)
             plant = Plant(plantTyper, pot)
             log("Planting " + tplant + " in pot " + pot.ident, message_type='info')
             pot.plant = plant
@@ -581,7 +589,7 @@ class MyFarmware():
         self.water()
         self.plant()
         
-        log("Test successful.", message_type='info')
+        log("Execution successful.", message_type='info')
                 
         ##TESTS
         

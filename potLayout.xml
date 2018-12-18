@@ -1,5 +1,17 @@
+<!-- If the region is a planting region then syntax is:
+
+    <region id="<regionId>" gs="0" x1="0" y1="5" x2="10" y2="20">
+        <bac x1="0" y1="0" x2="335" y2="515" z="-300" border="20" dist="46"/>
+    </region>
+    
+    Else syntax is:
+    
+    <region id="<regionId>" gs="0" x1="0" y1="5" x2="10" y2="20">
+        <pot id="<potId>" x="0" y="0" z="0"/>
+    </region>
+-->
 <farmbot>
-    <region id="0" gs="0" x1="0" y1="5" x2="10" y2="20">
-        <bac x1="0" y1="0" x2="310" y2="520" z="-300" border="20" dist="30"/>
+    <region id="0" gs="0" x1="0" y1="5" x2="10" y2="20" xw="2000" yw="600" zw="-408">
+        <bac x1="1831" y1="750" x2="2166" y2="1265" z="-440" border="26" dist="46"/>
     </region>
 </farmbot>

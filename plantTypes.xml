@@ -1,6 +1,6 @@
 <data>
-    <plant name="plant1" hole="1" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
-    <plant name="plant2" hole="0" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
-    <plant name="plant3" hole="0" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
-    <plant name="plant4" hole="0" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
+    <plant name="salade" hole="1" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
+    <plant name="tomate" hole="0" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
+    <plant name="choux" hole="1" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
+    <plant name="fleur" hole="0" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
 </data>
