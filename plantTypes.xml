@@ -1,6 +1,7 @@
 <data>
-    <plant name="salade" hole="1" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
-    <plant name="tomate" hole="0" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
-    <plant name="choux" hole="1" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
-    <plant name="fleur" hole="0" gt0="10" gt1="12" gt2="8" x="42" y="42" z="-42"/>
+    <plant name="salade" hole="1" gt0="10" gt1="12" gt2="8" x="2650" y="770" z="770"/>
+    <plant name="tomate" hole="0" gt0="10" gt1="12" gt2="8" x="2650" y="770" z="770"/>
+    <plant name="choux" hole="1" gt0="10" gt1="12" gt2="8" x="2650" y="770" z="770"/>
+    <plant name="fleur" hole="0" gt0="10" gt1="12" gt2="8" x="2650" y="770" z="770"/>
 </data>
+seeds=[2650, 770,-320]
