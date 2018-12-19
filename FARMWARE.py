@@ -255,12 +255,15 @@ class Structure():
         log("Loaded plant types.", message_type='info')
         
     def savePlants(self):
-        for plant in self.plantList:
-            fname = plant.id + ".txt"
-            filer = join(dirname(__file__), 'plants', fname)
-            f = open(filer, "wb")
-            pickle.dump(plant, f)
-            f.close()
+        try:
+            for plant in self.plantList:
+                fname = plant.id + ".txt"
+                filer = join(dirname(__file__), 'plants', fname)
+                f = open(filer, "wb")
+                pickle.dump(plant, f)
+                f.close()
+        except Exception as error:
+            log(repr(error))
         log("Saved plant objects.", message_type='info')
             
     def loadPlants(self):
@@ -278,12 +281,15 @@ class Structure():
         log("Loaded plant objects.", message_type='info')
         
     def savePots(self):
-        for pot in self.potList:
-            fname = pot.ident + ".txt"
-            filer = join(dirname(__file__), 'pots', fname)
-            f = open(filer, "wb")
-            pickle.dump(pot, f)
-            f.close()
+        try:
+            for pot in self.potList:
+                fname = pot.ident + ".txt"
+                filer = join(dirname(__file__), 'pots', fname)
+                f = open(filer, "wb")
+                pickle.dump(pot, f)
+                f.close()
+        except Exception as error:
+            log(repr(error))
         log("Saved pot objects.", message_type='info')
             
     def loadPots(self):
