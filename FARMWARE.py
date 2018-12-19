@@ -441,6 +441,7 @@ class MyFarmware():
     def goto(self, x, y, z):
         s = Sequence("goto", "green")
         s.add(self.move(self.coords[0], self.coords[1], 0, 100))
+        s.add(self.move(self.coords[0], y, 0, 100))
         s.add(self.move(x, y, 0, 100))
         s.add(self.move(x, y, z, 100))
         s.add(log("Moved to "+str(x)+", "+str(y)+", "+str(z)+".", message_type='info'))
