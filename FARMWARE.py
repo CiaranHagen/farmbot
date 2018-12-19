@@ -265,13 +265,16 @@ class Structure():
             
     def loadPlants(self):
         log("Loading plants.", message_type='info')
-        for file in os.listdir(join(dirname(__file__), 'plants')):
-            if file != "save.txt":
-                if file.endswith(".txt"):
-                    f = open("./plants/" + file, "rb")
-                    plant = pickle.Unpickler(f).load()
-                    self.plantList.append(plant)
-                    f.close()
+        try:
+            for file in os.listdir(join(dirname(__file__), 'plants')):
+                if file != "save.txt":
+                    if file.endswith(".txt"):
+                        f = open("./plants/" + file, "rb")
+                        plant = pickle.Unpickler(f).load()
+                        self.plantList.append(plant)
+                        f.close()
+        except Exception as error:
+            log(repr(error))
         log("Loaded plant objects.", message_type='info')
         
     def savePots(self):
@@ -285,13 +288,16 @@ class Structure():
             
     def loadPots(self):
         log("Loading pots.", message_type='info')
-        for file in os.listdir(join(dirname(__file__), 'pots')):
-            if file != "save.txt":
-                if file.endswith(".txt"):
-                    f = open("./pots/" + file, "rb")
-                    pot = pickle.Unpickler(f).load()
-                    self.potList.append(pot)
-                    f.close()
+        try:
+            for file in os.listdir(join(dirname(__file__), 'pots')):
+                if file != "save.txt":
+                    if file.endswith(".txt"):
+                        f = open("./pots/" + file, "rb")
+                        pot = pickle.Unpickler(f).load()
+                        self.potList.append(pot)
+                        f.close()
+        except Exception as error:
+            log(repr(error))
         log("Loaded pot objects.", message_type='info')
         
     ##SEND MAIL FUNCTION(S)
