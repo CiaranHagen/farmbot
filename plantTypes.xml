@@ -4,4 +4,3 @@
     <plant name="choux" hole="1" gt0="10" gt1="12" gt2="8" x="2650" y="770" z="770"/>
     <plant name="fleur" hole="0" gt0="10" gt1="12" gt2="8" x="2650" y="770" z="770"/>
 </data>
-seeds=[2650, 770,-320]
