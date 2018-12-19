@@ -173,7 +173,10 @@ class Structure():
     ##INITIALIZATION FUNCTIONS
     def initFarmLayout(self):
         filer = join(dirname(__file__), 'potLayout.xml')
-        e = xml.etree.ElementTree.parse(filer).getroot()
+        try:
+            e = xml.etree.ElementTree.parse(filer).getroot()
+        except Exception as error:
+            log(repr(error))
         log("Accessed potLayout.xml", message_type='struct')
         for region in e:
             #init regions
@@ -261,6 +264,7 @@ class Structure():
         log("Saved plant objects.", message_type='info')
             
     def loadPlants(self):
+        log("Loading plants.", message_type='info')
         for file in os.listdir(join(dirname(__file__), 'plants')):
             if file != "save.txt":
                 if file.endswith(".txt"):
@@ -280,6 +284,7 @@ class Structure():
         log("Saved pot objects.", message_type='info')
             
     def loadPots(self):
+        log("Loading pots.", message_type='info')
         for file in os.listdir(join(dirname(__file__), 'pots')):
             if file != "save.txt":
                 if file.endswith(".txt"):
