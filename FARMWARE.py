@@ -309,6 +309,7 @@ class Structure():
     ##SEND MAIL FUNCTION(S)
     def sendMail(self, kind):
         """
+        NOT FUNCTIONAL!!!!!!!
         Send a mail to the agriculturist, informing hime of 
             0 : Plants that are ready to be moved
             1 : Empty pot spots
@@ -484,7 +485,7 @@ class MyFarmware():
         s.add(self.move(l[0], l[1], l[2] + 100, 50))
         s.add(log("Putting back "+tool+".", message_type='info'))
         send(cp.create_node(kind='execute', args=s.sequence)) 
-        self.coords = l
+        self.coords = [l[0], l[1],l[2] + 100]
         
     def calibrate(self):
         i = 0
@@ -604,7 +605,7 @@ class MyFarmware():
         log("Data loaded.", message_type='info')
         
         self.goto(0,0,0)
-        #self.water()
+        self.water()
         self.plant()
         
         log("Execution successful.", message_type='info')
