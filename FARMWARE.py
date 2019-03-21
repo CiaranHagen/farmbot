@@ -523,30 +523,37 @@ class MyFarmware():
               
     ##SEQUENCES   
     def water(self):
-        whereWater = []
-        l = self.struct.waterAccessList
-        self.getTool("soilSensor")
-        for i in l:
-            self.goto(i[0], i[1], i[2]+78)
-            sensor = self.waterSensor()
-            while sensor == False and self.coords[2] >= -500: #<-- insert proper floor value
-                s = Sequence("findWater", "green")
-                s.add(self.move(i[0], i[1], self.coords[2] - 10, 20))
-                s.add(log("Looking for water.", message_type='info'))
-                send(cp.create_node(kind='execute', args=s.sequence)) 
-                self.coords[2] -= 10
-                sensor = self.waterSensor()
-                self.waiting(2000)
-            
-            whereWater.append(i[2]+78-self.coords[2])
-        self.putTool("soilSensor")
+        whereWater = [] #a list that is going to contain a value for each access point, determining how much water is needed. i.e. if the point is full, the value will be 0
         
-        for i in range(len(l)):
-            if whereWater[i] > 0:
-                self.goto(l[i][0], l[i][1], l[i][2])
-                self.waterFall(whereWater[i])
+        l = self.struct.waterAccessList #this list is read into memory when the program starts. It contains the position of each water access hole, read from potLayout.xml.
+        
+        self.getTool("soilSensor")  #self explanatory. It gets the soil sensor tool.
+        
+        for i in l: # for each water access point
+            self.goto(i[0], i[1], i[2]+78) # moves the arm to a position above the water access point. The +78 is the length of the soil sensor tool, so the arm needs to go to 78mm above the position, putting the tip of the sensor exactly to the right position.
+            sensor = self.waterSensor() # this function checks if the soil sensor has contact with water, so sensor is "True" if there is water at that height.
+            
+            while sensor == False and self.coords[2] >= -500:           # while the sensor doesn't find water                                                                   <-- !!!INSERT PROPER FLOOR HEIGHT HERE
+                s = Sequence("findWater", "green")                      # create a sequence (basically a wrapper for the whole action, to keep the robot from deadlocking)
+                s.add(self.move(i[0], i[1], self.coords[2] - 10, 20))   # move down 1cm. (This also implies that the height of the water is measured to an accuracy of 1cm. Since this is not rocket science, this is largely sufficient. You just need to keep it in mind when setting the position of the water access point, as the maximum height needs a little leeway.
+                s.add(log("Looking for water.", message_type='info'))   # This log gives absolutely no useful information, but the last action in a sequence always has to be a log, so it HAS to be there.
+                send(cp.create_node(kind='execute', args=s.sequence))   # send the sequence to the API. If you want, you can backtrack this through "farmware_tools.py" and "CeleryPy.py". It puts it into a format understandable by farmbot (CeleryScript) and puts it into JSON format before sending it to the API.
+                                            
+                self.coords[2] -= 10 # This adjusts the robot's position. As it is a pain to get information from the API, we found it easier to internally remember the position, instead of sending a query to the robot each time, to get it.                  
+                sensor = self.waterSensor() # reads the sensor again
+                self.waiting(2000) # waits two seconds, as the sensor can take a moment sometimes.
+            
+            whereWater.append(i[2]+78-self.coords[2]) # Adds the level of water that is missing to the list
+            #WHILE END
+            
+        self.putTool("soilSensor") # puts back the soil sensor.
+        
+        for i in range(len(l)):                         # for each water access point
+            if whereWater[i] > 0:                       # if the level in whereWater is > 0 (so if the level of water needed is not nada)
+                self.goto(l[i][0], l[i][1], l[i][2])    # go to the access point (This time without the offset for the tool)
+                self.waterFall(whereWater[i])           # unleash the water :) The value entered here is in mm. The function "waterFall" (391) transforms this value into seconds. <-- WE NEVER MEASURED THE OUTPUT PER SECOND; SO THE VALUE IN THIS FUNCTION HAS TO BE ADJUSTED!!!
     
-    def makePlant(self, pot, tplant):
+    def makePlant(self, pot, tplant):   #This just creates a virtual image of a plant with a lot of infos. Don't worry about this one.
         if pot.plant == None:
             plantTyper = next((y for y in self.struct.plantTypeList if y.name == tplant), None)
             plant = Plant(plantTyper, pot)
@@ -559,55 +566,64 @@ class MyFarmware():
                 return plant, plant
                 
     def plant(self):
-        filer = join(dirname(__file__), 'input.txt')
-        holeL = []
-        plantL = []
-        readL = []
-        f = open(filer, "rb")
-        for line in f:
-            line = line.split()
-            readL.append((line[0],line[1]))
-        f.close()
-        
-        for p in readL:
-            for z in range(int(p[0])):
-                potter = next((pot for pot in self.struct.potList if pot.plant == None), None)
-                x = self.makePlant(potter, p[1])
-                if x[0] != None:
-                    holeL.append(x[0])
-                plantL.append(x[1])
+        filer = join(dirname(__file__), 'input.txt') # path to the input file. This part has to be changed obviously if you get the proper webapp working.
+        holeL = [] # list of the plants to be planted that need a hole for the seed
+        plantL = [] # list of all plants to be planted
+        readL = [] # list to read the unsorted information from "input.txt" into.
+
+        #READ INPUT
+        f = open(filer, "rb") # opens the file for reading
+        for line in f:  # read one line from f into a STRING called "line" (each line contains a plantType and a number) 
+            line = line.split() # split the line at the " " symbol. This makes line into an array of strings with line[0] being the number of plants and line[1] being the plant type.
+            readL.append((line[0],line[1])) # adds the number and type to readL in a tuple.
+        f.close() # closes the file for reading.
+
+        #FILL holeL and plantL
+        for p in readL:                                                                         # for every tuple (number, type) in readL
+            for z in range(int(p[0])):                                                          # makes the next part execute "number" times
+                potter = next((pot for pot in self.struct.potList if pot.plant == None), None)  # pot generator. This automatically chooses the next best !empty! pot from struct.potList, which contains the pot objects created from the data read from "potLayout.xml".
+                x = self.makePlant(potter, p[1])                                                # uses the makePlant function on line 556 to create a plant object corresponding to the soon to be planted plant. The plant is initialized with a pot (potter) and a type (p[1])
+                if x[0] != None:                                                                # This is a bit weird. The makePlant function returns a tuple of either (None, <plant object>) if no hole is needed or (<plant object>, <SAME plant object>) if a hole is needed.
+                    holeL.append(x[0])                                                          # if a hole is needed, append the plant object to the holeL list.
+                plantL.append(x[1])                                                             # either way, append the plant object to the planting list.
                 
-        self.struct.savePlants()
-        self.struct.savePots()
-        self.getTool("planter")
-        for p in holeL:
-            self.goto(p.pot.x, p.pot.y, p.pot.z)   
-        self.putTool("planter")
-        self.getTool("seeder")
-        for p in plantL:
-            self.goto(p.kind.x, p.kind.y, p.kind.z)
-            self.vacuum_on()
-            self.goto(p.pot.x + 15, p.pot.y, p.pot.z + 75)
-            self.vacuum_off()
-        self.putTool("seeder")
+        self.struct.savePlants() # saves the plants to the "plants" folder using Pickler.
+        self.struct.savePots() # saves the pots to the "pots" folder using Pickler.
+        self.getTool("planter") # gets the 3D printed cone tool also known as a "hole-poker" in very professional terms...
+
+        #HOLES
+        for p in holeL:                             # for each plant in the (w)hole list (pardon the pun)
+            self.goto(p.pot.x, p.pot.y, p.pot.z)    # goto the position of the pot. Since this position puts the arm exactly on the surface of the pot, the tool (which protrudes a little further) will automatically be inside the pot.
+
+        self.putTool("planter") # put the "hole-poker" back
+        self.getTool("seeder") # get the suction needle tool
+
+        #PLANTING
+        for p in plantL:                                    # for each plant in the planting list
+            self.goto(p.kind.x, p.kind.y, p.kind.z)         # goto the position of the seed container defined in "plantTypes.xml"
+            self.vacuum_on()                                # commence suction :)
+            self.goto(p.pot.x + 15, p.pot.y, p.pot.z + 75)  # goto the pot where the seed is needed. Notice the offset again, due to the length of the tool which has to be taken into account.
+            self.vacuum_off()                               # stop suction. (Seed will hopefully drop into the pot...)
+                
+        self.putTool("seeder") # put back the suction needle tool  
         
-        f = open(filer, "wb")
-        f.close()
+        f = open(filer, "wb") # This opens the file for writing, effectively overwriting anything inside. So don't be surprised if your test only works once. The commands don't stick around.
+        f.close() # close the now empty file
         
-    def repot(self):
+    def repot(self): # This was supposed to be implemented as soon as the grabber tool for pots was functional, but we never got that far.
         return            
               
                   
     ##START POINT
-    def run(self):
+    def run(self):						#START POINT OF THE PROGRAM
         log("Farmware running...", message_type='info')
-        self.struct = Structure()
-        log("Data loaded.", message_type='info')
+        self.struct = Structure()				#This initializes the layout of the farm. It loads pots and plants that were created in a former run of the program from the "plants" and "pots" directories. It loads all existing pots from potLayout.xml. The pots are determined be coords, so the existing pots should normally not be overwritten by this.
+        log("Data loaded.", message_type='info')		#Just some fancy information.
         
-        self.goto(0,0,0)
-        self.water()
-        self.plant()
-        
+        self.goto(0,0,0)					#send the bot to 0,0,0. Not necessary, but a nice check to see if the origin is properly set.
+        self.water()						#Water sequence at line 525
+        self.plant()                                            #Plant sequence at line 561
+            
         log("Execution successful.", message_type='info')
                 
         ##TESTS
